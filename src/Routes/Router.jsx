@@ -3,6 +3,7 @@ import RootLayouts from "../Layouts/RootLayouts";
 import Home from "../Pages/Home/Home";
 import NotFound from "../Pages/Errors/NotFound";
 import Forbidden from "../Pages/Errors/Forbidden";
+import Loading from "../Components/Loading";
 
 export const router = createBrowserRouter([
   {
@@ -22,5 +23,9 @@ export const router = createBrowserRouter([
   {
     path: "/forbidden",
     Component: Forbidden,
+  },
+  {
+    path: "/loading",
+    Component: Loading,
   },
 ]);
