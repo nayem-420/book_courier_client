@@ -1,5 +1,5 @@
 import Lottie from "lottie-react";
-import notFoundAnimation from "../../../public/404.json";
+import notFoundAnimation from "../../assets/json/404.json";
 import { Link } from "react-router";
 
 const NotFound = () => {

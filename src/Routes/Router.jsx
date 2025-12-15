@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router";
 import RootLayouts from "../Layouts/RootLayouts";
 import Home from "../Pages/Home/Home";
 import NotFound from "../Pages/Errors/NotFound";
+import Forbidden from "../Pages/Errors/Forbidden";
 
 export const router = createBrowserRouter([
   {
@@ -17,5 +18,9 @@ export const router = createBrowserRouter([
   {
     path: "*",
     Component: NotFound,
+  },
+  {
+    path: "/forbidden",
+    Component: Forbidden,
   },
 ]);
