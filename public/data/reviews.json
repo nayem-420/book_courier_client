@@ -1,0 +1,92 @@
+[
+  {
+    "id": "test001",
+    "name": "Dianne Russell",
+    "designation": "Project Manager",
+    "rating": 3,
+    "review": "The idea that we can choose to see opportunities rather than limitations is a game-changer. The book encourages readers to step out of their comfort zones and embrace a more positive outlook on life.",
+    "company": "Amazon",
+    "avatar": "https://randomuser.me/api/portraits/women/44.jpg"
+  },
+  {
+    "id": "test002",
+    "name": "Robert Fox",
+    "designation": "Senior Developer",
+    "rating": 5,
+    "review": "This book has completely transformed my perspective on problem-solving. It taught me to view challenges as opportunities for growth rather than obstacles. The practical exercises helped me develop a more resilient mindset.",
+    "company": "Wikipedia",
+    "avatar": "https://randomuser.me/api/portraits/men/32.jpg"
+  },
+  {
+    "id": "test003",
+    "name": "Jenny Wilson",
+    "designation": "UX Designer",
+    "rating": 4,
+    "review": "An inspiring read that pushes you to break free from self-imposed limitations. The author's approach to mindset transformation is both practical and deeply motivating. I found myself applying these principles immediately in my daily work.",
+    "company": "Microsoft",
+    "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+  },
+  {
+    "id": "test004",
+    "name": "Mahmudul Hasan Sohag",
+    "designation": "CEO",
+    "rating": 5,
+    "review": "The concept of abundance thinking revolutionized how I approach both personal and professional challenges. This book provides actionable strategies that anyone can implement to shift their mindset and achieve greater success.",
+    "company": "Rokomari",
+    "avatar": "https://randomuser.me/api/portraits/men/75.jpg"
+  },
+  {
+    "id": "test005",
+    "name": "Kristin Watson",
+    "designation": "Product Owner",
+    "rating": 4,
+    "review": "A powerful guide to reframing negative thoughts into positive actions. The emphasis on choosing your perspective rather than being controlled by circumstances is truly liberating. Highly recommend for anyone seeking personal growth.",
+    "company": "Biblio",
+    "avatar": "https://randomuser.me/api/portraits/women/28.jpg"
+  },
+  {
+    "id": "test006",
+    "name": "Cameron Williamson",
+    "designation": "Software Engineer",
+    "rating": 3,
+    "review": "The book offers valuable insights into developing a growth mindset. While some concepts felt repetitive, the core message about embracing possibilities over limitations resonated deeply with me and changed how I tackle difficult projects.",
+    "company": "Batighor",
+    "avatar": "https://randomuser.me/api/portraits/men/46.jpg"
+  },
+  {
+    "id": "test007",
+    "name": "Esther Howard",
+    "designation": "Business Analyst",
+    "rating": 5,
+    "review": "One of the most impactful books I've read on mindset transformation. It challenges you to step outside your comfort zone and see the world through a lens of endless possibilities. The practical examples make it easy to apply.",
+    "company": "BoiProkash",
+    "avatar": "https://randomuser.me/api/portraits/women/90.jpg"
+  },
+  {
+    "id": "test008",
+    "name": "Darrell Steward",
+    "designation": "Sales Manager",
+    "rating": 4,
+    "review": "This book taught me that limitations are often self-created barriers. By choosing to see opportunities instead, I've been able to achieve goals I once thought impossible. A must-read for anyone looking to unlock their full potential.",
+    "company": "Adobe",
+    "avatar": "https://randomuser.me/api/portraits/men/52.jpg"
+  },
+  {
+    "id": "test009",
+    "name": "Courtney Henry",
+    "designation": "HR Manager",
+    "rating": 5,
+    "review": "The emphasis on adopting an abundance mindset has been life-changing. This book provides a clear roadmap for transforming negative thinking patterns into positive, action-oriented approaches. I've recommended it to my entire team.",
+    "company": "Tesla",
+    "avatar": "https://randomuser.me/api/portraits/women/72.jpg"
+  },
+  {
+    "id": "test010",
+    "name": "Albert Flores",
+    "designation": "Chief Technology Officer",
+    "rating": 4,
+    "review": "A refreshing take on personal development that focuses on mindset as the foundation for success. The book's practical approach to reframing challenges helped me lead my team more effectively and foster a culture of innovation.",
+    "company": "IBM",
+    "avatar": "https://randomuser.me/api/portraits/men/67.jpg"
+  }
+]
