@@ -13,6 +13,7 @@ import "swiper/css/pagination";
 import banner1 from "../../../assets/banner-1.jpg";
 import banner2 from "../../../assets/banner-2.jpg";
 import banner3 from "../../../assets/banner-3.jpg";
+import { FaArrowAltCircleRight } from "react-icons/fa";
 
 const Banner = () => {
   const banners = [banner1, banner2, banner3];
@@ -51,8 +52,9 @@ const Banner = () => {
               </p>
 
               <Link to="/all-books">
-                <button className="bg-[#FF6B35] hover:bg-[#e85a28] text-white px-6 py-3 rounded-lg font-semibold transition">
+                <button className="bg-[#FF6B35] hover:bg-[#e85a28] text-white px-6 py-3 rounded-lg font-semibold transition flex items-center gap-2">
                   Explore All Books
+                  <FaArrowAltCircleRight />
                 </button>
               </Link>
             </div>
