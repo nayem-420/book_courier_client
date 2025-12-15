@@ -9,6 +9,17 @@
   default: true;
 }
 
+/* @layer components {
+  
+} */
+
+.btn-primary {
+    @apply bg-[#FF6B35] hover:bg-[#e85a28]
+    text-white px-6 py-3 rounded-lg
+    font-semibold transition
+    flex items-center gap-2 border-none;
+  }
+
 body {
   font-family: "Urbanist", sans-serif;
 }

@@ -52,7 +52,7 @@ const Banner = () => {
               </p>
 
               <Link to="/all-books">
-                <button className="bg-[#FF6B35] hover:bg-[#e85a28] text-white px-6 py-3 rounded-lg font-semibold transition flex items-center gap-2">
+                <button className="btn-primary">
                   Explore All Books
                   <FaArrowAltCircleRight />
                 </button>
