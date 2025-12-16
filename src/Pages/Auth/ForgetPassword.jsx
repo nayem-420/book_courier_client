@@ -1,7 +1,17 @@
+import { useForm } from "react-hook-form";
 import Logo from "../Shared/Logo";
 import { Link } from "react-router";
 
 const ForgetPassword = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const handleForgetPassword = (data) => {
+    console.log(data);
+  };
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2">
       {/* Left Section */}
@@ -45,7 +55,10 @@ const ForgetPassword = () => {
             No worries, we'll send you reset instructions
           </p>
 
-          <form className="space-y-4">
+          <form
+            onSubmit={handleSubmit(handleForgetPassword)}
+            className="space-y-4"
+          >
             <div>
               <label className="label">
                 <span className="label-text">Email Address</span>
@@ -54,7 +67,11 @@ const ForgetPassword = () => {
                 type="email"
                 placeholder="Enter your email"
                 className="input input-bordered w-full"
+                {...register("email", { required: true })}
               />
+              {errors.email?.type === "required" && (
+                <p className="text-red-500">Email is required.</p>
+              )}
             </div>
 
             <button className="btn btn-primary w-full">Send Reset Link</button>

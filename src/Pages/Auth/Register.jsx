@@ -2,8 +2,19 @@ import React from "react";
 import { Link } from "react-router";
 import Logo from "../Shared/Logo";
 import SocialLogin from "./SocialLogin";
+import { useForm } from "react-hook-form";
 
 const Register = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const handleRegistration = (data) => {
+    console.log(data);
+  };
+
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2">
       {/* Left Section */}
@@ -27,7 +38,10 @@ const Register = () => {
           </p>
           <p className="mt-8 text-sm">
             Already have an account...
-            <Link to={'/login'} className="font-semibold underline cursor-pointer">
+            <Link
+              to={"/login"}
+              className="font-semibold underline cursor-pointer"
+            >
               Login
             </Link>
           </p>
@@ -46,16 +60,23 @@ const Register = () => {
             Register to try our amazing services
           </p>
 
-          <form className="space-y-4">
+          <form
+            onSubmit={handleSubmit(handleRegistration)}
+            className="space-y-4"
+          >
             <div>
               <label className="label">
                 <span className="label-text">Name</span>
               </label>
               <input
-                type="email"
+                type="text"
                 placeholder="Enter your name"
                 className="input input-bordered w-full"
+                {...register("name", { required: true })}
               />
+              {errors.name?.type === "required" && (
+                <p className="text-red-500">Name is required.</p>
+              )}
             </div>
 
             <div>
@@ -66,7 +87,11 @@ const Register = () => {
                 type="email"
                 placeholder="Enter your email"
                 className="input input-bordered w-full"
+                {...register("email", { required: true })}
               />
+              {errors.email?.type === "required" && (
+                <p className="text-red-500">Email is required.</p>
+              )}
             </div>
 
             <div>
@@ -78,6 +103,9 @@ const Register = () => {
                 type="file"
                 className="file-input file-input-bordered w-full"
               />
+              {errors.photo?.type === "required" && (
+                <p className="text-red-500">Photo is required.</p>
+              )}
             </div>
 
             <div>
@@ -88,7 +116,28 @@ const Register = () => {
                 type="password"
                 placeholder="Enter password"
                 className="input input-bordered w-full"
+                {...register("password", {
+                  required: true,
+                  minLength: 6,
+                  pattern:
+                    /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).+$/,
+                })}
               />
+              {errors.password?.type === "required" && (
+                <p className="text-red-500">Password is required.</p>
+              )}
+              {errors.password?.type === "minLength" && (
+                <p className="text-red-500">
+                  Password must be 6 characters or longer
+                </p>
+              )}
+              {errors.password?.type === "pattern" && (
+                <p className="text-red-500">
+                  Password must have at least one uppercase, at least one
+                  lowercase, at least one number, and at least one special
+                  characters
+                </p>
+              )}
             </div>
 
             <button className="btn btn-primary w-full">Log in</button>

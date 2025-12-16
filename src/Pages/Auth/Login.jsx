@@ -2,8 +2,19 @@ import { FaGoogle, FaFacebookF, FaApple } from "react-icons/fa";
 import Logo from "../Shared/Logo";
 import { Link } from "react-router";
 import SocialLogin from "./SocialLogin";
+import { useForm } from "react-hook-form";
 
 const Login = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const handleLogin = (data) => {
+    console.log(data);
+  };
+
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2">
       {/* Left Section */}
@@ -27,7 +38,10 @@ const Login = () => {
           </p>
           <p className="mt-8 text-sm">
             Don't have an account?{" "}
-            <Link to={'/register'} className="font-semibold underline cursor-pointer">
+            <Link
+              to={"/register"}
+              className="font-semibold underline cursor-pointer"
+            >
               Register
             </Link>
           </p>
@@ -46,7 +60,7 @@ const Login = () => {
             Log in to try our amazing services
           </p>
 
-          <form className="space-y-4">
+          <form onSubmit={handleSubmit(handleLogin)} className="space-y-4">
             <div>
               <label className="label">
                 <span className="label-text">Email Address</span>
@@ -55,7 +69,11 @@ const Login = () => {
                 type="email"
                 placeholder="Enter your email"
                 className="input input-bordered w-full"
+                {...register("email", { required: true })}
               />
+              {errors.email?.type === "required" && (
+                <p className="text-red-500">Email is required</p>
+              )}
             </div>
 
             <div>
@@ -66,11 +84,20 @@ const Login = () => {
                 type="password"
                 placeholder="Enter password"
                 className="input input-bordered w-full"
+                {...register("password", { required: true, minLength: 6 })}
               />
+              {errors.password?.type === "minLength" && (
+                <p className="text-red-500">
+                  Password must be 6 characters or longer{" "}
+                </p>
+              )}
             </div>
 
             <div className="text-right">
-              <Link to={'/forget-password'} className="link link-success text-orange-500 text-sm">
+              <Link
+                to={"/forget-password"}
+                className="link link-success text-orange-500 text-sm"
+              >
                 Forgot Password?
               </Link>
             </div>
