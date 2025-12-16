@@ -26,8 +26,9 @@ const Navbar = () => {
   return (
     <div className="navbar bg-base-100 shadow-sm rounded-2xl">
       <div className="navbar-start">
+
         <div className="dropdown">
-          <div tabIndex={0} className="btn btn-ghost lg:hidden">
+          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
@@ -84,7 +85,6 @@ const Navbar = () => {
       <div className="navbar-end gap-3">
         {user ? (
           <>
-            {/* Profile photo */}
             <div
               className="tooltip tooltip-bottom"
               data-tip={user.displayName || "User"}
@@ -95,8 +95,6 @@ const Navbar = () => {
                 className="w-10 h-10 rounded-full object-cover border"
               />
             </div>
-
-            {/* Logout */}
             <button
               onClick={handleLogout}
               className="btn btn-outline btn-error"

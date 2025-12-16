@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Logo from "../Shared/Logo";
 import SocialLogin from "./SocialLogin";
 import { useForm } from "react-hook-form";
 import useAuth from "../../hooks/useAuth";
+import axios from "axios";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const Register = () => {
   const {
@@ -12,14 +14,51 @@ const Register = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  const { registerUser } = useAuth();
+  const { registerUser, updateUserProfile } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
 
   const handleRegistration = (data) => {
+    const profileImg = data.photo[0];
+
     registerUser(data.email, data.password)
       .then((result) => {
-        console.log(result.user);
+        console.log(result);
+        const formData = new FormData();
+        formData.append("image", profileImg);
+
+        const image_API_URL = `https://api.imgbb.com/1/upload?key=${
+          import.meta.env.VITE_image_host
+          }`;
+        
+        axios.post(image_API_URL, formData)
+          .then(res => {
+            const photoURL = res.data.data.url;
+            
+            const userInfo = {
+              email: data.email,
+              displayName: data.name,
+              photoURL: photoURL,
+            };
+
+            useAxiosSecure.post("/users", userInfo).then((res) => {
+              if (res.data.insertedId) {
+                console.log("user created in the database");
+              }
+            });
+
+            const userProfile = {
+              displayName: data.name,
+              photoURL: photoURL,
+            };
+            updateUserProfile(userProfile)
+              .then(() => {
+                navigate(location.state || "/");
+              })
+              .catch((error) => console.log(error));
+        })
       })
       .catch((error) => {
         console.log(error);
