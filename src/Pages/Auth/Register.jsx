@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Logo from "../Shared/Logo";
 import SocialLogin from "./SocialLogin";
 import { useForm } from "react-hook-form";
+import useAuth from "../../hooks/useAuth";
 
 const Register = () => {
   const {
@@ -11,8 +13,17 @@ const Register = () => {
     formState: { errors },
   } = useForm();
 
+  const { registerUser } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
+
   const handleRegistration = (data) => {
-    console.log(data);
+    registerUser(data.email, data.password)
+      .then((result) => {
+        console.log(result.user);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -112,17 +123,30 @@ const Register = () => {
               <label className="label">
                 <span className="label-text">Password</span>
               </label>
-              <input
-                type="password"
-                placeholder="Enter password"
-                className="input input-bordered w-full"
-                {...register("password", {
-                  required: true,
-                  minLength: 6,
-                  pattern:
-                    /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).+$/,
-                })}
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter password"
+                  className="input input-bordered w-full pr-12"
+                  {...register("password", {
+                    required: true,
+                    minLength: 6,
+                    pattern:
+                      /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).+$/,
+                  })}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                >
+                  {showPassword ? (
+                    <FaEyeSlash size={20} />
+                  ) : (
+                    <FaEye size={20} />
+                  )}
+                </button>
+              </div>
               {errors.password?.type === "required" && (
                 <p className="text-red-500">Password is required.</p>
               )}

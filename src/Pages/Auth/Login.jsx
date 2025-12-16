@@ -1,8 +1,10 @@
-import { FaGoogle, FaFacebookF, FaApple } from "react-icons/fa";
+import { useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Logo from "../Shared/Logo";
 import { Link } from "react-router";
 import SocialLogin from "./SocialLogin";
 import { useForm } from "react-hook-form";
+import useAuth from "../../hooks/useAuth";
 
 const Login = () => {
   const {
@@ -11,8 +13,18 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
+  const { signInUser } = useAuth();
+
+  const [showPassword, setShowPassword] = useState(false);
+
   const handleLogin = (data) => {
-    console.log(data);
+    signInUser(data.email, data.password)
+      .then((result) => {
+        console.log(result.user);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -80,12 +92,25 @@ const Login = () => {
               <label className="label">
                 <span className="label-text">Password</span>
               </label>
-              <input
-                type="password"
-                placeholder="Enter password"
-                className="input input-bordered w-full"
-                {...register("password", { required: true, minLength: 6 })}
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter password"
+                  className="input input-bordered w-full pr-12"
+                  {...register("password", { required: true, minLength: 6 })}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                >
+                  {showPassword ? (
+                    <FaEyeSlash size={20} />
+                  ) : (
+                    <FaEye size={20} />
+                  )}
+                </button>
+              </div>
               {errors.password?.type === "minLength" && (
                 <p className="text-red-500">
                   Password must be 6 characters or longer{" "}
