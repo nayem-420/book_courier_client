@@ -5,7 +5,6 @@ import useAuth from "../hooks/useAuth";
 import Swal from "sweetalert2";
 
 const Navbar = () => {
-
   const { user, logOut } = useAuth();
 
   const handleLogout = () => {
@@ -23,7 +22,6 @@ const Navbar = () => {
         console.error(error);
       });
   };
-
 
   return (
     <div className="navbar bg-base-100 shadow-sm rounded-2xl">
