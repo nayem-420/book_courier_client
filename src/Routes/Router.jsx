@@ -7,6 +7,7 @@ import Loading from "../Components/Loading";
 import Coverage from "../Coverage/Coverage";
 import Login from "../Pages/Auth/Login";
 import Register from "../Pages/Auth/Register";
+import ForgetPassword from "../Pages/Auth/ForgetPassword";
 
 export const router = createBrowserRouter([
   {
@@ -43,5 +44,9 @@ export const router = createBrowserRouter([
   {
     path: "/register",
     Component: Register,
+  },
+  {
+    path: "/forget-password",
+    Component: ForgetPassword,
   },
 ]);
