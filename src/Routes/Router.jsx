@@ -4,6 +4,7 @@ import Home from "../Pages/Home/Home";
 import NotFound from "../Pages/Errors/NotFound";
 import Forbidden from "../Pages/Errors/Forbidden";
 import Loading from "../Components/Loading";
+import Coverage from "../Coverage/Coverage";
 
 export const router = createBrowserRouter([
   {
@@ -13,6 +14,11 @@ export const router = createBrowserRouter([
       {
         index: true,
         Component: Home,
+      },
+      {
+        path: "coverage",
+        Component: Coverage,
+        loader: () => fetch("/data/warehouses.json").then((res) => res.json()),
       },
     ],
   },
