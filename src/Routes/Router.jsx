@@ -8,6 +8,7 @@ import Coverage from "../Coverage/Coverage";
 import Login from "../Pages/Auth/Login";
 import Register from "../Pages/Auth/Register";
 import ForgetPassword from "../Pages/Auth/ForgetPassword";
+import AuthLayout from "../Layouts/AuthLayout";
 
 export const router = createBrowserRouter([
   {
@@ -26,6 +27,24 @@ export const router = createBrowserRouter([
     ],
   },
   {
+    path: "/",
+    Component: AuthLayout,
+    children: [
+      {
+        path: "login",
+        Component: Login,
+      },
+      {
+        path: "register",
+        Component: Register,
+      },
+      {
+        path: "forget-password",
+        Component: ForgetPassword,
+      },
+    ],
+  },
+  {
     path: "*",
     Component: NotFound,
   },
@@ -36,17 +55,5 @@ export const router = createBrowserRouter([
   {
     path: "/loading",
     Component: Loading,
-  },
-  {
-    path: "/login",
-    Component: Login,
-  },
-  {
-    path: "/register",
-    Component: Register,
-  },
-  {
-    path: "/forget-password",
-    Component: ForgetPassword,
   },
 ]);
