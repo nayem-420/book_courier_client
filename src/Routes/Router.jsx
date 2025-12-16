@@ -5,6 +5,8 @@ import NotFound from "../Pages/Errors/NotFound";
 import Forbidden from "../Pages/Errors/Forbidden";
 import Loading from "../Components/Loading";
 import Coverage from "../Coverage/Coverage";
+import Login from "../Pages/Auth/Login";
+import Register from "../Pages/Auth/Register";
 
 export const router = createBrowserRouter([
   {
@@ -33,5 +35,13 @@ export const router = createBrowserRouter([
   {
     path: "/loading",
     Component: Loading,
+  },
+  {
+    path: "/login",
+    Component: Login,
+  },
+  {
+    path: "/register",
+    Component: Register,
   },
 ]);

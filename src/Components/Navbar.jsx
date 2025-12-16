@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink } from "react-router";
+import { Link, NavLink } from "react-router";
 import Logo from "../Pages/Shared/Logo";
 
 const Navbar = () => {
@@ -41,9 +41,9 @@ const Navbar = () => {
             </li>
           </ul>
         </div>
-        <a className="btn btn-ghost text-xl">
+        <Link to={'/'} className="btn btn-ghost text-xl">
           <Logo></Logo>
-        </a>
+        </Link>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
