@@ -1,6 +1,8 @@
 import { useForm } from "react-hook-form";
 import Logo from "../Shared/Logo";
 import { Link } from "react-router";
+import useAuth from "../../hooks/useAuth";
+import Swal from "sweetalert2";
 
 const ForgetPassword = () => {
   const {
@@ -9,9 +11,30 @@ const ForgetPassword = () => {
     formState: { errors },
   } = useForm();
 
+  const { forgetPassword } = useAuth();
+
   const handleForgetPassword = (data) => {
-    console.log(data);
+    const email = data.email;
+
+    forgetPassword(email)
+      .then(() => {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Password reset link sent!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      })
+      .catch((error) => {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: error.message,
+        });
+      });
   };
+
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2">
       {/* Left Section */}
@@ -34,7 +57,7 @@ const ForgetPassword = () => {
           <p className="mt-8 text-sm">
             Remember your password?{" "}
             <Link
-              to={"/login"}
+              to="/login"
               className="font-semibold underline cursor-pointer"
             >
               Log In
@@ -46,9 +69,10 @@ const ForgetPassword = () => {
       {/* Right Section */}
       <div className="flex items-center justify-center p-6">
         {/* Logo – top right */}
-        <Link to={"/"} className="absolute top-6 right-6">
+        <Link to="/" className="absolute top-6 right-6">
           <Logo />
         </Link>
+
         <div className="w-full max-w-md">
           <h2 className="text-3xl font-bold mb-2">Forgot Password?</h2>
           <p className="text-gray-500 mb-6">
@@ -69,8 +93,8 @@ const ForgetPassword = () => {
                 className="input input-bordered w-full"
                 {...register("email", { required: true })}
               />
-              {errors.email?.type === "required" && (
-                <p className="text-red-500">Email is required.</p>
+              {errors.email && (
+                <p className="text-red-500 text-sm">Email is required</p>
               )}
             </div>
 
@@ -78,7 +102,7 @@ const ForgetPassword = () => {
           </form>
 
           <div className="mt-6 text-center">
-            <Link to={"/login"} className="link link-success text-sm">
+            <Link to="/login" className="link link-success text-sm">
               ← Back to Log In
             </Link>
           </div>
