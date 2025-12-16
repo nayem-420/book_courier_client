@@ -1,8 +1,30 @@
 import React from "react";
 import { Link, NavLink } from "react-router";
 import Logo from "../Pages/Shared/Logo";
+import useAuth from "../hooks/useAuth";
+import Swal from "sweetalert2";
 
 const Navbar = () => {
+
+  const { user, logOut } = useAuth();
+
+  const handleLogout = () => {
+    logOut()
+      .then(() => {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Logged out successfully",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+
   return (
     <div className="navbar bg-base-100 shadow-sm rounded-2xl">
       <div className="navbar-start">
@@ -41,7 +63,7 @@ const Navbar = () => {
             </li>
           </ul>
         </div>
-        <Link to={'/'} className="btn btn-ghost text-xl">
+        <Link to={"/"} className="btn btn-ghost text-xl">
           <Logo></Logo>
         </Link>
       </div>
@@ -61,8 +83,34 @@ const Navbar = () => {
           </li>
         </ul>
       </div>
-      <div className="navbar-end">
-        <Link to={'/login'} className="btn btn-primary">Login</Link>
+      <div className="navbar-end gap-3">
+        {user ? (
+          <>
+            {/* Profile photo */}
+            <div
+              className="tooltip tooltip-bottom"
+              data-tip={user.displayName || "User"}
+            >
+              <img
+                src={user?.photoURL || "https://i.ibb.co/2FsfXqM/user.png"}
+                alt="profile"
+                className="w-10 h-10 rounded-full object-cover border"
+              />
+            </div>
+
+            {/* Logout */}
+            <button
+              onClick={handleLogout}
+              className="btn btn-outline btn-error"
+            >
+              Logout
+            </button>
+          </>
+        ) : (
+          <Link to="/login" className="btn btn-primary">
+            Login
+          </Link>
+        )}
       </div>
     </div>
   );
