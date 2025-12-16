@@ -7,26 +7,23 @@ const Coverage = () => {
   const serviceCenter = useLoaderData();
   console.log(serviceCenter);
 
-    const position = [23.8103, 90.4125];
-    
+  const position = [23.8103, 90.4125];
 
-    const mapRef = useRef(null);
+  const mapRef = useRef(null);
 
-    const handleSearch = (e) => {
-      e.preventDefault();
-      const location = e.target.location.value;
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const location = e.target.location.value;
 
-      const district = serviceCenter.find((c) =>
-        c.district.toLowerCase().includes(location.toLowerCase())
-      );
+    const district = serviceCenter.find((c) =>
+      c.district.toLowerCase().includes(location.toLowerCase())
+    );
 
-      if (district) {
-        const coord = [district.latitude, district.longitude];
-        mapRef.current.flyTo(coord, 14);
-      }
-    };
-
-
+    if (district) {
+      const coord = [district.latitude, district.longitude];
+      mapRef.current.flyTo(coord, 14);
+    }
+  };
 
   return (
     <div>
@@ -34,7 +31,7 @@ const Coverage = () => {
         We are available in 64 district
       </h1>
 
-      <form onSubmit={handleSearch}>
+      <form onSubmit={handleSearch} className="flex mb-8">
         <label className="input">
           <svg
             className="h-[1em] opacity-50"
@@ -59,6 +56,9 @@ const Coverage = () => {
             placeholder="Search"
           />
         </label>
+        <button type="submit" className="btn btn-primary">
+          Search
+        </button>
       </form>
 
       <div>

@@ -2,6 +2,7 @@ import React from "react";
 import Banner from "./Banner/Banner";
 import Brands from "./Brands";
 import Reviews from "./Reviews/Reviews";
+import ServiceHighlights from "../ServiceHighlights";
 
 const reviewsPromise = fetch("/data/reviews.json").then((res) => res.json());
 
@@ -10,6 +11,7 @@ const Home = () => {
     <div>
       <Banner></Banner>
       <Brands></Brands>
+      <ServiceHighlights></ServiceHighlights>
       <Reviews reviewsPromise={reviewsPromise}></Reviews>
     </div>
   );
