@@ -9,6 +9,8 @@ import Login from "../Pages/Auth/Login";
 import Register from "../Pages/Auth/Register";
 import ForgetPassword from "../Pages/Auth/ForgetPassword";
 import AuthLayout from "../Layouts/AuthLayout";
+import PrivateRoutes from "./PrivateRoutes";
+import DashboardLayout from "../Layouts/DashboardLayout";
 
 export const router = createBrowserRouter([
   {
@@ -43,6 +45,14 @@ export const router = createBrowserRouter([
         Component: ForgetPassword,
       },
     ],
+  },
+  {
+    path: "/dashboard",
+    element: (
+      <PrivateRoutes>
+        <DashboardLayout></DashboardLayout>
+      </PrivateRoutes>
+    ),
   },
   {
     path: "*",
