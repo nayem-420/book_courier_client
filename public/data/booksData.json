@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "category": "Design Low Book",
+    "title": "How Deal With Very Bad BOOK",
+    "price": 390,
+    "author": "Esther",
+    "bookImg": "https://i.ibb.co.com/wZyxbCJr/OIP-1481953555.jpg",
+    "rating": 4,
+    "description": "This book explains how to handle bad experiences, mistakes, and failures in life with patience, learning mindset, and emotional strength."
+  },
+  {
+    "id": 2,
+    "category": "Fiction Novel",
+    "title": "The Silent River",
+    "price": 250,
+    "author": "John Doe",
+    "bookImg": "https://i.ibb.co.com/hRQLBM4w/OIP-2882621055.jpg",
+    "rating": 5,
+    "description": "A mysterious fiction novel about a silent river that hides secrets, emotions, and unexpected twists throughout the journey."
+  },
+  {
+    "id": 3,
+    "category": "Science",
+    "title": "Quantum Physics Basics",
+    "price": 499,
+    "author": "Alice Smith",
+    "bookImg": "https://i.ibb.co.com/9mYmk4gK/OIP-2192575265.jpg",
+    "rating": 4,
+    "description": "An easy introduction to quantum physics concepts, helping beginners understand complex ideas using simple explanations and real examples."
+  },
+  {
+    "id": 4,
+    "category": "History",
+    "title": "Ancient Civilizations",
+    "price": 295,
+    "author": "Robert Brown",
+    "bookImg": "https://i.ibb.co.com/Vsg6L16/OIP-2868812865.jpg",
+    "rating": 3,
+    "description": "This history book explores ancient civilizations, their culture, inventions, lifestyles, and how they shaped modern human society."
+  },
+  {
+    "id": 5,
+    "category": "Self Improvement",
+    "title": "Master Your Mind",
+    "price": 199,
+    "author": "Emily White",
+    "bookImg": "https://i.ibb.co.com/KpmJkDzZ/OIP-4261224645.jpg",
+    "rating": 5,
+    "description": "A self improvement guide focused on controlling thoughts, building discipline, positive habits, and mental clarity for success."
+  },
+  {
+    "id": 6,
+    "category": "Fiction Novel",
+    "title": "Lost in the Woods",
+    "price": 220,
+    "author": "Mark Green",
+    "bookImg": "https://i.ibb.co.com/1tCTf9Vn/OIP-3145495633.jpg",
+    "rating": 4,
+    "description": "A thrilling fiction story about survival, fear, and self discovery after getting lost deep inside a dangerous forest."
+  }
+]

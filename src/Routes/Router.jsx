@@ -12,6 +12,7 @@ import AuthLayout from "../Layouts/AuthLayout";
 import PrivateRoutes from "./PrivateRoutes";
 import DashboardLayout from "../Layouts/DashboardLayout";
 import Librarians from "../Pages/Librarians/Librarians";
+import Books from "../Pages/Home/Books/Books";
 
 export const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ export const router = createBrowserRouter([
             <Librarians></Librarians>
           </PrivateRoutes>
         ),
+      },
+      {
+        path: "all-books",
+        Component: Books,
       },
       {
         path: "coverage",

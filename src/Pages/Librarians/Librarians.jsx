@@ -1,21 +1,46 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import useAuth from "../../hooks/useAuth";
+import Swal from "sweetalert2";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const Librarians = () => {
   const { user } = useAuth();
-  const { register, handleSubmit, reset } = useForm();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+
+  const axiosSecure = useAxiosSecure();
 
   const onSubmit = (data) => {
-    const bookData = {
-      ...data,
-      librarianEmail: user?.email,
-      createdAt: new Date(),
-    };
+    const { price } = data;
 
-    console.log(bookData);
-    // TODO: POST to backend
-    reset();
+
+    Swal.fire({
+      title: "Are you sure?",
+      text: `Agree with the cost ৳${price}`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, confirm it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosSecure.post("/books", data).then((res) => {
+          console.log(res.data);
+        });
+        Swal.fire({
+          title: "Congratulations!",
+          text: "Your book has been added.",
+          icon: "success",
+        });
+        // TODO: POST bookData to backend here
+        reset();
+      }
+    });
   };
 
   return (
@@ -54,6 +79,40 @@ const Librarians = () => {
             className="input input-bordered w-full"
             placeholder="https://image-url.com"
           />
+        </div>
+
+        {/* sender name */}
+        <div>
+          <label className="label">
+            <span className="label-text">Sender Name</span>
+          </label>
+          <input
+            type="text"
+            placeholder="Enter your name"
+            className="input input-bordered w-full"
+            defaultValue={user?.displayName}
+            {...register("name", { required: true })}
+          />
+          {errors.name?.type === "required" && (
+            <p className="text-red-500">Name is required</p>
+          )}
+        </div>
+
+        {/* sender email */}
+        <div>
+          <label className="label">
+            <span className="label-text">Email Address</span>
+          </label>
+          <input
+            type="email"
+            placeholder="Enter your email"
+            className="input input-bordered w-full"
+            defaultValue={user?.email}
+            {...register("email", { required: true })}
+          />
+          {errors.email?.type === "required" && (
+            <p className="text-red-500">Email is required</p>
+          )}
         </div>
 
         {/* Price & Quantity */}

@@ -3,14 +3,17 @@ import Banner from "./Banner/Banner";
 import Brands from "./Brands";
 import Reviews from "./Reviews/Reviews";
 import ServiceHighlights from "./ServiceHighlights";
+import Books from "./Books/Books";
 
 const reviewsPromise = fetch("/data/reviews.json").then((res) => res.json());
+const booksPromise = fetch("/data/booksData.json").then((res) => res.json());
 
 const Home = () => {
   return (
     <div>
       <Banner></Banner>
       <Brands></Brands>
+      <Books booksPromise={booksPromise}></Books>
       <ServiceHighlights></ServiceHighlights>
       <Reviews reviewsPromise={reviewsPromise}></Reviews>
     </div>
