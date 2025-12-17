@@ -11,6 +11,7 @@ import ForgetPassword from "../Pages/Auth/ForgetPassword";
 import AuthLayout from "../Layouts/AuthLayout";
 import PrivateRoutes from "./PrivateRoutes";
 import DashboardLayout from "../Layouts/DashboardLayout";
+import Librarians from "../Pages/Librarians/Librarians";
 
 export const router = createBrowserRouter([
   {
@@ -22,12 +23,21 @@ export const router = createBrowserRouter([
         Component: Home,
       },
       {
+        path: "librarians",
+        element: (
+          <PrivateRoutes>
+            <Librarians></Librarians>
+          </PrivateRoutes>
+        ),
+      },
+      {
         path: "coverage",
         Component: Coverage,
         loader: () => fetch("/data/warehouses.json").then((res) => res.json()),
       },
     ],
   },
+
   {
     path: "/",
     Component: AuthLayout,

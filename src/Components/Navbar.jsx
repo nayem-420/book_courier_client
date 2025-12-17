@@ -26,7 +26,6 @@ const Navbar = () => {
   return (
     <div className="navbar bg-base-100 shadow-sm rounded-2xl">
       <div className="navbar-start">
-
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
             <svg
@@ -60,6 +59,9 @@ const Navbar = () => {
             <li>
               <NavLink to={"/coverage"}>Coverage</NavLink>
             </li>
+            <li>
+              <NavLink to={"/librarians"}>Librarians</NavLink>
+            </li>
           </ul>
         </div>
         <Link to={"/"} className="btn btn-ghost text-xl">
@@ -79,6 +81,9 @@ const Navbar = () => {
           </li>
           <li>
             <NavLink to={"/coverage"}>Coverage</NavLink>
+          </li>
+          <li>
+            <NavLink to={"/librarians"}>Librarians</NavLink>
           </li>
         </ul>
       </div>
