@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Logo from "../Shared/Logo";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import SocialLogin from "./SocialLogin";
 import { useForm } from "react-hook-form";
 import useAuth from "../../hooks/useAuth";
@@ -14,6 +14,8 @@ const Login = () => {
   } = useForm();
 
   const { signInUser } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -21,6 +23,7 @@ const Login = () => {
     signInUser(data.email, data.password)
       .then((result) => {
         console.log(result.user);
+        navigate(location?.state || "/");
       })
       .catch((error) => {
         console.log(error);
@@ -52,6 +55,7 @@ const Login = () => {
             Don't have an account?{" "}
             <Link
               to={"/register"}
+              state={location.state}
               className="font-semibold underline cursor-pointer"
             >
               Register
