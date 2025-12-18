@@ -3,6 +3,9 @@ import { useForm } from "react-hook-form";
 import useAuth from "../../hooks/useAuth";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { imageUpload } from "../../utils";
+import { useMutation } from "@tanstack/react-query";
+import { PiSpinnerGapBold } from "react-icons/pi";
 
 const Librarians = () => {
   const { user } = useAuth();
@@ -15,32 +18,91 @@ const Librarians = () => {
 
   const axiosSecure = useAxiosSecure();
 
-  const onSubmit = (data) => {
-    const { price } = data;
+  // React Query Mutation
+  const { isPending, mutate } = useMutation({
+    mutationFn: async (bookData) => {
+      const response = await axiosSecure.post("/books", bookData);
+      return response.data;
+    },
+    onSuccess: (data) => {
+      console.log("Success:", data);
+      Swal.fire({
+        title: "Congratulations!",
+        text: "Your book has been added.",
+        icon: "success",
+      });
+      reset();
+    },
+    onError: (error) => {
+      console.error("Error:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+      });
+    },
+  });
 
+  const onSubmit = async (data) => {
+    try {
+      const { price, title, author, name, email, quantity } = data;
+      const imageFile = data?.image[0];
 
-    Swal.fire({
-      title: "Are you sure?",
-      text: `Agree with the cost ৳${price}`,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, confirm it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        axiosSecure.post("/books", data).then((res) => {
-          console.log(res.data);
-        });
+      // Check if image exists
+      if (!imageFile) {
         Swal.fire({
-          title: "Congratulations!",
-          text: "Your book has been added.",
-          icon: "success",
+          icon: "error",
+          title: "Error!",
+          text: "Please select an image",
         });
-        // TODO: POST bookData to backend here
-        reset();
+        return;
       }
-    });
+
+      // Upload image
+      const imageURL = await imageUpload(imageFile);
+
+      const bookData = {
+        image: imageURL,
+        title,
+        author,
+        name,
+        email,
+        quantity: Number(quantity),
+        price: Number(price),
+        status: data.status,
+        description: data.description,
+        seller: {
+          image: user?.photoURL,
+          name: user?.displayName,
+          email: user?.email,
+        },
+      };
+
+      console.table(bookData);
+
+      // Show confirmation dialog
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: `Agree with the cost ৳${price}`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, confirm it!",
+      });
+
+      // If confirmed, submit data
+      if (result.isConfirmed) {
+        mutate(bookData);
+      }
+    } catch (error) {
+      console.error("Image upload error:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Upload Failed",
+        text: "Failed to upload image. Please try again.",
+      });
+    }
   };
 
   return (
@@ -72,13 +134,13 @@ const Librarians = () => {
 
         {/* Image */}
         <div>
-          <label className="label">Book Image URL</label>
+          <label className="label">Book Image</label>
           <input
-            type="text"
+            type="file"
             {...register("image", { required: true })}
-            className="input input-bordered w-full"
-            placeholder="https://image-url.com"
+            className="file-input file-input-bordered w-full"
           />
+          {errors.image && <p className="text-red-500">Image is required</p>}
         </div>
 
         {/* sender name */}
@@ -161,7 +223,14 @@ const Librarians = () => {
         </div>
 
         {/* Submit */}
-        <button className="btn btn-primary w-full">Add Book</button>
+        <button
+          type="submit"
+          className="btn btn-primary w-full flex items-center justify-center gap-2"
+          disabled={isPending}
+        >
+          {isPending && <PiSpinnerGapBold className="animate-spin text-xl" />}
+          {isPending ? "Adding..." : "Add Book"}
+        </button>
       </form>
     </div>
   );

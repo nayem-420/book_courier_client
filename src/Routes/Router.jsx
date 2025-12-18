@@ -33,7 +33,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "all-books",
-        Component: Books,
+        element: <Books></Books>,
       },
       {
         path: "coverage",

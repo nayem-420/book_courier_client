@@ -5,8 +5,9 @@ import Logo from "../Shared/Logo";
 import SocialLogin from "./SocialLogin";
 import { useForm } from "react-hook-form";
 import useAuth from "../../hooks/useAuth";
-import axios from "axios";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
+// import axios from "axios";
+import { imageUpload } from "../../utils";
+// import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const Register = () => {
   const {
@@ -20,49 +21,76 @@ const Register = () => {
   const { registerUser, updateUserProfile } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleRegistration = (data) => {
-    const profileImg = data.photo[0];
+  const handleRegistration = async (data) => {
+    try {
+      const profileImg = data.photo[0];
 
-    registerUser(data.email, data.password)
-      .then((result) => {
-        console.log(result);
-        const formData = new FormData();
-        formData.append("image", profileImg);
+      // 1 Firebase register
+      const result = await registerUser(data.email, data.password);
+      console.log(result.user);
 
-        const image_API_URL = `https://api.imgbb.com/1/upload?key=${
-          import.meta.env.VITE_image_host
-          }`;
-        
-        axios.post(image_API_URL, formData)
-          .then(res => {
-            const photoURL = res.data.data.url;
-            
-            const userInfo = {
-              email: data.email,
-              displayName: data.name,
-              photoURL: photoURL,
-            };
+      // 2 Image upload (IMPORTANT: await)
+      const photoURL = await imageUpload(profileImg);
 
-            useAxiosSecure.post("/users", userInfo).then((res) => {
-              if (res.data.insertedId) {
-                console.log("user created in the database");
-              }
-            });
-
-            const userProfile = {
-              displayName: data.name,
-              photoURL: photoURL,
-            };
-            updateUserProfile(userProfile)
-              .then(() => {
-                navigate(location.state || "/");
-              })
-              .catch((error) => console.log(error));
-        })
-      })
-      .catch((error) => {
-        console.log(error);
+      // 3 Update Firebase profile
+      await updateUserProfile({
+        displayName: data.name,
+        photoURL: photoURL,
       });
+
+      // 4 (Optional) backend e user save
+      // await axiosSecure.post("/users", {
+      //   email: data.email,
+      //   displayName: data.name,
+      //   photoURL,
+      // });
+
+      // 5 Navigate
+      navigate(location.state || "/");
+    } catch (error) {
+      console.error("Registration failed:", error);
+    }
+    // const profileImg = data.photo[0];
+
+    // registerUser(data.email, data.password)
+    //   .then((result) => {
+    //     console.log(result);
+    //     const formData = new FormData();
+    //     formData.append("image", profileImg);
+
+    //     const image_API_URL = `https://api.imgbb.com/1/upload?key=${
+    //       import.meta.env.VITE_image_host
+    //     }`;
+
+    //     const photoURL = imageUpload(profileImg);
+    //     axios.post(/*image_API_URL, formData*/).then(() => {
+
+    //       const userInfo = {
+    //         email: data.email,
+    //         displayName: data.name,
+    //         photoURL: photoURL,
+    //       };
+
+    //       useAxiosSecure.post("/users", userInfo).then((res) => {
+    //         if (res.data.insertedId) {
+    //           console.log("user created in the database");
+    //         }
+    //       });
+
+    //       const userProfile = {
+    //         displayName: data.name,
+    //         photoURL: photoURL,
+    //       };
+    //       updateUserProfile(userProfile)
+    //         .then(() => {
+    //           navigate(location.state || "/");
+    //         })
+    //         .catch((error) => console.log(error));
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
   };
 
   return (
@@ -152,6 +180,7 @@ const Register = () => {
               <input
                 type="file"
                 className="file-input file-input-bordered w-full"
+                {...register("photo", { required: true })}
               />
               {errors.photo?.type === "required" && (
                 <p className="text-red-500">Photo is required.</p>
@@ -211,7 +240,7 @@ const Register = () => {
                 Login
               </Link>
             </p>
-            <button className="btn btn-primary w-full">Log in</button>
+            <button className="btn btn-primary w-full">Register</button>
           </form>
 
           <div className="divider my-6">OR</div>

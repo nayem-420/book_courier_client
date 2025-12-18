@@ -1,23 +1,21 @@
 import React from "react";
 
 const BooksCard = ({ book }) => {
-  const { title, description, bookImg, author } = book;
+  const { title, description, image, author } = book;
+
   return (
     <div className="card bg-base-100 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-2 cursor-pointer">
       <figure>
         <img
           className="rounded-xl h-64 w-full object-cover"
-          src={bookImg}
+          src={image}
           alt={title}
         />
       </figure>
       <div className="card-body">
         <h2 className="card-title">{title}</h2>
-        <p>{description}</p>
-        <p>{author}</p>
-        <div className="card-actions justify-end">
-          <button className="btn btn-primary">Buy Now</button>
-        </div>
+        <p className="line-clamp-3">{description}</p>
+        <p className="text-sm text-gray-500">By {author}</p>
       </div>
     </div>
   );
