@@ -1,10 +1,14 @@
 import React from "react";
+import { Link } from "react-router";
 
 const BooksCard = ({ book }) => {
-  const { title, description, image, author } = book;
+  const { _id, title, description, image, author } = book || {};
 
   return (
-    <div className="card bg-base-100 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-2 cursor-pointer">
+    <Link
+      to={`/all-books/${_id}`}
+      className="card bg-base-100 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-2 cursor-pointer"
+    >
       <figure>
         <img
           className="rounded-xl h-64 w-full object-cover"
@@ -17,7 +21,7 @@ const BooksCard = ({ book }) => {
         <p className="line-clamp-3">{description}</p>
         <p className="text-sm text-gray-500">By {author}</p>
       </div>
-    </div>
+    </Link>
   );
 };
 

@@ -13,6 +13,10 @@ import PrivateRoutes from "./PrivateRoutes";
 import DashboardLayout from "../Layouts/DashboardLayout";
 import Librarians from "../Pages/Librarians/Librarians";
 import Books from "../Pages/Home/Books/Books";
+import BookDetails from "../Pages/Home/Books/BookDetails";
+import PaymentsSuccess from "../Pages/Dashboard/Payments/PaymentsSuccess";
+import MyOrders from "../Pages/Dashboard/MyOrders/MyOrders";
+import ManageOrders from "../Pages/Dashboard/ManageOrders/ManageOrders";
 
 export const router = createBrowserRouter([
   {
@@ -34,6 +38,14 @@ export const router = createBrowserRouter([
       {
         path: "all-books",
         element: <Books></Books>,
+      },
+      {
+        path: "all-books/:id",
+        element: <BookDetails></BookDetails>,
+      },
+      {
+        path: "payment-success",
+        element: <PaymentsSuccess></PaymentsSuccess>,
       },
       {
         path: "coverage",
@@ -68,6 +80,16 @@ export const router = createBrowserRouter([
         <DashboardLayout></DashboardLayout>
       </PrivateRoutes>
     ),
+    children: [
+      {
+        path: "my-orders",
+        element: <MyOrders></MyOrders>,
+      },
+      {
+        path: "manage-orders",
+        element: <ManageOrders></ManageOrders>,
+      },
+    ],
   },
   {
     path: "*",

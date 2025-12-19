@@ -1,16 +1,16 @@
 import React from "react";
-import BooksCard from "./BooksCard";
 import { useQuery } from "@tanstack/react-query";
-import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import LoadingSpinner from "../../../Components/LoadingSpinner";
+import BooksCard from "./Books/BooksCard";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import LoadingSpinner from "../../Components/LoadingSpinner";
 
-const Books = () => {
+const HomeBooks = () => {
   const axiosSecure = useAxiosSecure();
 
   const { data: books = [], isLoading } = useQuery({
-    queryKey: ["books"],
+    queryKey: ["home-books"],
     queryFn: async () => {
-      const response = await axiosSecure.get("/books");
+      const response = await axiosSecure.get("/home-books");
       return response.data;
     },
   });
@@ -23,11 +23,10 @@ const Books = () => {
     <div className="container mx-auto px-4">
       <div className="text-center my-12">
         <h1 className="text-4xl font-bold text-orange-500 mb-4">
-          Our Book Collection
+          Featured Books
         </h1>
         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-          Discover our curated selection of amazing books from various genres.
-          Find your next favorite read!
+          Check out our top picks this week!
         </p>
       </div>
 
@@ -40,4 +39,4 @@ const Books = () => {
   );
 };
 
-export default Books;
+export default HomeBooks;

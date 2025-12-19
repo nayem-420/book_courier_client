@@ -1,6 +1,6 @@
 import React from 'react';
 import Logo from '../Pages/Shared/Logo';
-import { Link } from 'react-router';
+import { Link, Outlet } from 'react-router';
 
 const DashboardLayout = () => {
     return (
@@ -33,7 +33,7 @@ const DashboardLayout = () => {
             <Link to={'/'} className="px-4"><Logo></Logo></Link>
           </nav>
           {/* Page content here */}
-          <div className="p-4">Page Content</div>
+          <Outlet></Outlet>
         </div>
 
         <div className="drawer-side is-drawer-close:overflow-visible">
