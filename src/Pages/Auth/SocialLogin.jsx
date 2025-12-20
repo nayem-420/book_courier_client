@@ -9,23 +9,38 @@ const SocialLogin = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const handleGoogleSignIn = () => {
-    signInGoogle()
-      .then((result) => {
-        console.log(result.user);const userInfo = {
-          email: result.user.email,
-          displayName: result.user.displayName,
-          photoURL: result.user.photoURL,
-        };
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await signInGoogle();
 
-        axiosSecure.post("/users", userInfo).then((res) => {
-          console.log("user data has been stored", res.data);
-          navigate(location.state || "/");
-        });
-      })
-      .catch((error) => {
-        console.log(error);
+      // Debug: Check what we got from Google
+      console.log("Google sign-in result:", {
+        email: result.user?.email,
+        displayName: result.user?.displayName,
+        photoURL: result.user?.photoURL,
       });
+
+      const userInfo = {
+        email: result.user?.email,
+        displayName: result.user?.displayName,
+        photoURL: result.user?.photoURL,
+      };
+
+      // Save to database
+      const res = await axiosSecure.post("/users", userInfo);
+      console.log("User saved to DB:", res.data);
+
+      // Navigate after a small delay to ensure state is updated
+      const redirectPath = location.state?.from?.pathname || "/";
+
+      setTimeout(() => {
+        navigate(redirectPath, { replace: true });
+        // Force a page reload if needed (last resort)
+        // window.location.href = redirectPath;
+      }, 200);
+    } catch (error) {
+      console.error("Google sign-in error:", error);
+    }
   };
 
   return (

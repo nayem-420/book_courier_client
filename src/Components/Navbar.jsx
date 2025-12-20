@@ -77,7 +77,7 @@ const Navbar = () => {
             <NavLink to={"/all-books"}>Books</NavLink>
           </li>
           <li>
-            <NavLink to={"/dashboard"}>Dashboard</NavLink>
+            <NavLink to={"/dashboard/my-orders"}>Dashboard</NavLink>
           </li>
           <li>
             <NavLink to={"/coverage"}>Coverage</NavLink>

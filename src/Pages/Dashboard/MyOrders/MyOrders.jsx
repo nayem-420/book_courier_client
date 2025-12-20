@@ -13,6 +13,7 @@ const MyOrders = () => {
     data: orders = [],
     isLoading,
     isError,
+    error,
   } = useQuery({
     queryKey: ["orders", user?.email],
     enabled: !!user?.email,
@@ -22,13 +23,16 @@ const MyOrders = () => {
     },
   });
 
-  if (isLoading) return <LoadingSpinner></LoadingSpinner>;
-
   if (isError) {
+    console.error("Error loading orders:", error);
     return (
-      <p className="text-center text-red-500 mt-10">Failed to load orders</p>
+      <p className="text-center text-red-500 mt-10">
+        Failed to load orders: {error.message}
+      </p>
     );
   }
+
+  if (isLoading) return <LoadingSpinner></LoadingSpinner>;
 
   return (
     <div>

@@ -41,11 +41,11 @@ const AuthProvider = ({ children }) => {
   const forgetPassword = (email) => {
     setLoading(true);
     return sendPasswordResetEmail(auth, email);
-    };
-    
-    const updateUserProfile = (profile) => {
-      return updateProfile(auth.currentUser, profile);
-    };
+  };
+
+  const updateUserProfile = (profile) => {
+    return updateProfile(auth.currentUser, profile);
+  };
 
   useEffect(() => {
     const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -68,7 +68,9 @@ const AuthProvider = ({ children }) => {
     updateUserProfile,
   };
 
-  return <AuthContext value={authInfo}>{children}</AuthContext>;
+  return (
+    <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
+  );
 };
 
 export default AuthProvider;

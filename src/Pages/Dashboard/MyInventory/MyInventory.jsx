@@ -28,15 +28,15 @@ const MyInventory = () => {
           {/* head */}
           <thead>
             <tr>
-              <th></th>
-              <th>Name</th>
+              <th>#</th>
+              <th>Book</th>
               <th>Job</th>
-              <th>Favorite Color</th>
+              <th>Update</th>
             </tr>
           </thead>
           <tbody>
-            {books.map((book) => (
-              <BooksDataRow key={book._id} book={book}></BooksDataRow>
+            {books.map((book, i) => (
+              <BooksDataRow key={book._id} book={book} i={i} />
             ))}
           </tbody>
         </table>

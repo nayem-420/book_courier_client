@@ -5,9 +5,8 @@ import Logo from "../Shared/Logo";
 import SocialLogin from "./SocialLogin";
 import { useForm } from "react-hook-form";
 import useAuth from "../../hooks/useAuth";
-// import axios from "axios";
 import { imageUpload } from "../../utils";
-// import useAxiosSecure from "../../hooks/useAxiosSecure";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const Register = () => {
   const {
@@ -17,80 +16,58 @@ const Register = () => {
   } = useForm();
   const location = useLocation();
   const navigate = useNavigate();
+  const axiosSecure = useAxiosSecure();
 
   const { registerUser, updateUserProfile } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
+  const [backendError, setBackendError] = useState(""); 
 
   const handleRegistration = async (data) => {
     try {
+      setBackendError(""); 
       const profileImg = data.photo[0];
 
-      // 1 Firebase register
+      // Firebase register
       const result = await registerUser(data.email, data.password);
       console.log(result.user);
 
-      // 2 Image upload (IMPORTANT: await)
+      // Image upload
       const photoURL = await imageUpload(profileImg);
 
-      // 3 Update Firebase profile
       await updateUserProfile({
         displayName: data.name,
         photoURL: photoURL,
       });
 
-      // 4 (Optional) backend e user save
-      // await axiosSecure.post("/users", {
-      //   email: data.email,
-      //   displayName: data.name,
-      //   photoURL,
-      // });
+      const response = await axiosSecure.post("/users", {
+        email: data.email,
+        displayName: data.name,
+        photoURL,
+      });
 
-      // 5 Navigate
+      if (response.data.message === "User already exists") {
+        setBackendError(
+          "This email is already registered. Please login instead."
+        );
+        return;
+      }
+
       navigate(location.state || "/");
     } catch (error) {
       console.error("Registration failed:", error);
+
+      if (error.code === "auth/email-already-in-use") {
+        setBackendError(
+          "This email is already registered. Please login instead."
+        );
+      } else if (error.code === "auth/weak-password") {
+        setBackendError(
+          "Password is too weak. Please use a stronger password."
+        );
+      } else {
+        setBackendError("Registration failed. Please try again.");
+      }
     }
-    // const profileImg = data.photo[0];
-
-    // registerUser(data.email, data.password)
-    //   .then((result) => {
-    //     console.log(result);
-    //     const formData = new FormData();
-    //     formData.append("image", profileImg);
-
-    //     const image_API_URL = `https://api.imgbb.com/1/upload?key=${
-    //       import.meta.env.VITE_image_host
-    //     }`;
-
-    //     const photoURL = imageUpload(profileImg);
-    //     axios.post(/*image_API_URL, formData*/).then(() => {
-
-    //       const userInfo = {
-    //         email: data.email,
-    //         displayName: data.name,
-    //         photoURL: photoURL,
-    //       };
-
-    //       useAxiosSecure.post("/users", userInfo).then((res) => {
-    //         if (res.data.insertedId) {
-    //           console.log("user created in the database");
-    //         }
-    //       });
-
-    //       const userProfile = {
-    //         displayName: data.name,
-    //         photoURL: photoURL,
-    //       };
-    //       updateUserProfile(userProfile)
-    //         .then(() => {
-    //           navigate(location.state || "/");
-    //         })
-    //         .catch((error) => console.log(error));
-    //     });
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
   };
 
   return (
@@ -142,6 +119,13 @@ const Register = () => {
             onSubmit={handleSubmit(handleRegistration)}
             className="space-y-4"
           >
+            {/* Backend Error Message */}
+            {backendError && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                <p className="text-red-600 text-sm">{backendError}</p>
+              </div>
+            )}
+
             <div>
               <label className="label">
                 <span className="label-text">Name</span>
@@ -153,7 +137,7 @@ const Register = () => {
                 {...register("name", { required: true })}
               />
               {errors.name?.type === "required" && (
-                <p className="text-red-500">Name is required.</p>
+                <p className="text-red-500 text-sm mt-1">Name is required.</p>
               )}
             </div>
 
@@ -168,7 +152,7 @@ const Register = () => {
                 {...register("email", { required: true })}
               />
               {errors.email?.type === "required" && (
-                <p className="text-red-500">Email is required.</p>
+                <p className="text-red-500 text-sm mt-1">Email is required.</p>
               )}
             </div>
 
@@ -183,7 +167,7 @@ const Register = () => {
                 {...register("photo", { required: true })}
               />
               {errors.photo?.type === "required" && (
-                <p className="text-red-500">Photo is required.</p>
+                <p className="text-red-500 text-sm mt-1">Photo is required.</p>
               )}
             </div>
 
@@ -216,18 +200,20 @@ const Register = () => {
                 </button>
               </div>
               {errors.password?.type === "required" && (
-                <p className="text-red-500">Password is required.</p>
+                <p className="text-red-500 text-sm mt-1">
+                  Password is required.
+                </p>
               )}
               {errors.password?.type === "minLength" && (
-                <p className="text-red-500">
+                <p className="text-red-500 text-sm mt-1">
                   Password must be 6 characters or longer
                 </p>
               )}
               {errors.password?.type === "pattern" && (
-                <p className="text-red-500">
+                <p className="text-red-500 text-sm mt-1">
                   Password must have at least one uppercase, at least one
                   lowercase, at least one number, and at least one special
-                  characters
+                  character
                 </p>
               )}
             </div>

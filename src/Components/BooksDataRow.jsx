@@ -1,54 +1,52 @@
-import React from 'react';
+import React from "react";
+import { Link } from "react-router";
 
 const BooksDataRow = ({ book, i }) => {
-    const {
-        image,
-      customer,
-      title,
-      category,
-      price,
-      quantity,
-      status,
-      transactionId,
-    } = book || {};
-    return (
-      <tr>
-        <td>{i + 1}</td>
-        <td>
-          <div className="flex items-center gap-3">
-            <div className="avatar">
+  const { _id, image, title, status, price } = book || {};
+
+  return (
+    <tr>
+      <td>{i + 1}</td>
+
+      {/* Book Info */}
+      <td>
+        <div className="flex items-center gap-3">
+          <div className="avatar">
             <div className="mask mask-squircle w-12 h-12">
               <img src={image} alt={title} />
             </div>
           </div>
-            <div>
-              <div className="font-bold">{title}</div>
-              <div className="text-sm opacity-50">{category}</div>
-            </div>
+          <div>
+            <div className="font-bold">{title}</div>
+            <div className="text-sm opacity-50">৳ {price}</div>
           </div>
-        </td>
-        <td>{customer}</td>
-        <td>৳ {price}</td>
-        <td className="text-xs">{transactionId}</td>
-        <td>{quantity}</td>
-        <td>
-          <span
-            className={`badge ${
-              status === "pending"
-                ? "badge-warning"
-                : status === "completed"
-                ? "badge-success"
-                : "badge-error"
-            }`}
-          >
-            {status}
-          </span>
-        </td>
-        <td>
-          <button className="btn btn-ghost btn-xs">Details</button>
-        </td>
-      </tr>
-    );
+        </div>
+      </td>
+
+      {/* Status */}
+      <td>
+        <span
+          className={`badge ${
+            status === "published"
+              ? "badge-success"
+              : "badge-warning"
+          }`}
+        >
+          {status}
+        </span>
+      </td>
+
+      {/* Edit */}
+      <td>
+        <Link
+          to={`/dashboard/edit-book/${_id}`}
+          className="btn btn-ghost btn-xs"
+        >
+          Edit
+        </Link>
+      </td>
+    </tr>
+  );
 };
 
 export default BooksDataRow;

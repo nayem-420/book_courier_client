@@ -1,6 +1,8 @@
 import React from 'react';
 import Logo from '../Pages/Shared/Logo';
 import { Link, Outlet } from 'react-router';
+import { FaBook, FaBookOpen, FaClipboardList, FaInbox } from 'react-icons/fa';
+import { MdLibraryAdd } from "react-icons/md";
 
 const DashboardLayout = () => {
     return (
@@ -30,7 +32,9 @@ const DashboardLayout = () => {
                 <path d="M14 10l2 2l-2 2"></path>
               </svg>
             </label>
-            <Link to={'/'} className="px-4"><Logo></Logo></Link>
+            <Link to={"/"} className="px-4">
+              <Logo></Logo>
+            </Link>
           </nav>
           {/* Page content here */}
           <Outlet></Outlet>
@@ -47,7 +51,8 @@ const DashboardLayout = () => {
             <ul className="menu w-full grow">
               {/* List item */}
               <li>
-                <button
+                <Link
+                  to={"/"}
                   className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                   data-tip="Homepage"
                 >
@@ -66,7 +71,67 @@ const DashboardLayout = () => {
                     <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                   </svg>
                   <span className="is-drawer-close:hidden">Homepage</span>
-                </button>
+                </Link>
+              </li>
+
+              {/* Librarians */}
+              <li>
+                <Link
+                  to="/librarians"
+                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                  data-tip="Add Books"
+                >
+                  <MdLibraryAdd className="my-1.5 size-4" />
+                  <span className="is-drawer-close:hidden">Add Books</span>
+                </Link>
+              </li>
+
+              {/* My orders */}
+              <li>
+                <Link
+                  to="/dashboard/my-orders"
+                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                  data-tip="My Orders"
+                >
+                  <FaInbox className="my-1.5 size-4" />
+                  <span className="is-drawer-close:hidden">My Orders</span>
+                </Link>
+              </li>
+
+              {/* my inventory */}
+              <li>
+                <Link
+                  to="/dashboard/my-inventory"
+                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                  data-tip="My Inventory"
+                >
+                  <FaBookOpen className="my-1.5 size-4" />
+                  <span className="is-drawer-close:hidden">My Inventory</span>
+                </Link>
+              </li>
+
+              {/* manage orders */}
+              <li>
+                <Link
+                  to="/dashboard/manage-orders"
+                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                  data-tip="Manage Orders"
+                >
+                  <FaClipboardList className="my-1.5 size-4" />
+                  <span className="is-drawer-close:hidden">Manage Orders</span>
+                </Link>
+              </li>
+
+              {/* my books */}
+              <li>
+                <Link
+                  to="/dashboard/my-books"
+                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                  data-tip="My Books"
+                >
+                  <FaBook className="my-1.5 size-4" />
+                  <span className="is-drawer-close:hidden">My Books</span>
+                </Link>
               </li>
 
               {/* List item */}

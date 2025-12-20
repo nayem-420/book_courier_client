@@ -1,14 +1,20 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import useAuth from "../../hooks/useAuth";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Swal from "sweetalert2";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
-import { imageUpload } from "../../utils";
-import { useMutation } from "@tanstack/react-query";
 import { PiSpinnerGapBold } from "react-icons/pi";
+
+import useAuth from "../../../hooks/useAuth";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { imageUpload } from "../../../utils";
+import { useNavigate } from "react-router";
 
 const Librarians = () => {
   const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
   const {
     register,
     handleSubmit,
@@ -16,25 +22,23 @@ const Librarians = () => {
     formState: { errors },
   } = useForm();
 
-  const axiosSecure = useAxiosSecure();
-
-  // React Query Mutation
   const { isPending, mutate } = useMutation({
     mutationFn: async (bookData) => {
-      const response = await axiosSecure.post("/books", bookData);
-      return response.data;
+      const res = await axiosSecure.post("/books", bookData);
+      return res.data;
     },
-    onSuccess: (data) => {
-      console.log("Success:", data);
+    onSuccess: () => {
       Swal.fire({
         title: "Congratulations!",
         text: "Your book has been added.",
         icon: "success",
+      }).then(() => {
+        queryClient.invalidateQueries(["inventory", user?.email]);
+        reset();
+        navigate("/dashboard/my-inventory");
       });
-      reset();
     },
-    onError: (error) => {
-      console.error("Error:", error);
+    onError: () => {
       Swal.fire({
         icon: "error",
         title: "Oops...",
@@ -45,10 +49,9 @@ const Librarians = () => {
 
   const onSubmit = async (data) => {
     try {
-      const { price, title, author, name, email, quantity } = data;
-      const imageFile = data?.image[0];
+      const { title, author, price, quantity, status, description } = data;
+      const imageFile = data?.image?.[0];
 
-      // Check if image exists
       if (!imageFile) {
         Swal.fire({
           icon: "error",
@@ -58,29 +61,24 @@ const Librarians = () => {
         return;
       }
 
-      // Upload image
       const imageURL = await imageUpload(imageFile);
 
       const bookData = {
-        image: imageURL,
         title,
         author,
-        name,
-        email,
-        quantity: Number(quantity),
+        image: imageURL,
         price: Number(price),
-        status: data.status,
-        description: data.description,
+        quantity: Number(quantity),
+        status,
+        description,
         seller: {
-          image: user?.photoURL,
           name: user?.displayName,
           email: user?.email,
+          image: user?.photoURL,
         },
+        createdAt: new Date(),
       };
 
-      console.table(bookData);
-
-      // Show confirmation dialog
       const result = await Swal.fire({
         title: "Are you sure?",
         text: `Agree with the cost ৳${price}`,
@@ -91,17 +89,16 @@ const Librarians = () => {
         confirmButtonText: "Yes, confirm it!",
       });
 
-      // If confirmed, submit data
       if (result.isConfirmed) {
         mutate(bookData);
       }
-    } catch (error) {
-      console.error("Image upload error:", error);
+    } catch (err) {
       Swal.fire({
         icon: "error",
         title: "Upload Failed",
         text: "Failed to upload image. Please try again.",
       });
+      console.log(err);
     }
   };
 
@@ -119,6 +116,9 @@ const Librarians = () => {
             className="input input-bordered w-full"
             placeholder="Enter book name"
           />
+          {errors.title && (
+            <p className="text-red-500 text-sm">Book name is required</p>
+          )}
         </div>
 
         {/* Author */}
@@ -130,6 +130,9 @@ const Librarians = () => {
             className="input input-bordered w-full"
             placeholder="Enter author name"
           />
+          {errors.author && (
+            <p className="text-red-500 text-sm">Author is required</p>
+          )}
         </div>
 
         {/* Image */}
@@ -140,40 +143,8 @@ const Librarians = () => {
             {...register("image", { required: true })}
             className="file-input file-input-bordered w-full"
           />
-          {errors.image && <p className="text-red-500">Image is required</p>}
-        </div>
-
-        {/* sender name */}
-        <div>
-          <label className="label">
-            <span className="label-text">Sender Name</span>
-          </label>
-          <input
-            type="text"
-            placeholder="Enter your name"
-            className="input input-bordered w-full"
-            defaultValue={user?.displayName}
-            {...register("name", { required: true })}
-          />
-          {errors.name?.type === "required" && (
-            <p className="text-red-500">Name is required</p>
-          )}
-        </div>
-
-        {/* sender email */}
-        <div>
-          <label className="label">
-            <span className="label-text">Email Address</span>
-          </label>
-          <input
-            type="email"
-            placeholder="Enter your email"
-            className="input input-bordered w-full"
-            defaultValue={user?.email}
-            {...register("email", { required: true })}
-          />
-          {errors.email?.type === "required" && (
-            <p className="text-red-500">Email is required</p>
+          {errors.image && (
+            <p className="text-red-500 text-sm">Image is required</p>
           )}
         </div>
 
@@ -183,20 +154,26 @@ const Librarians = () => {
             <label className="label">Price (৳)</label>
             <input
               type="number"
-              {...register("price", { required: true })}
+              {...register("price", { required: true, min: 1 })}
               className="input input-bordered w-full"
               placeholder="450"
             />
+            {errors.price && (
+              <p className="text-red-500 text-sm">Valid price is required</p>
+            )}
           </div>
 
           <div>
             <label className="label">Quantity</label>
             <input
               type="number"
-              {...register("quantity", { required: true })}
+              {...register("quantity", { required: true, min: 1 })}
               className="input input-bordered w-full"
               placeholder="10"
             />
+            {errors.quantity && (
+              <p className="text-red-500 text-sm">Valid quantity is required</p>
+            )}
           </div>
         </div>
 
@@ -205,6 +182,7 @@ const Librarians = () => {
           <label className="label">Status</label>
           <select
             {...register("status", { required: true })}
+            defaultValue="unpublished"
             className="select select-bordered w-full"
           >
             <option value="published">Published</option>
