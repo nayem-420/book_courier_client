@@ -1,73 +1,77 @@
 import React, { useState } from "react";
-import DeleteModal from "./DeleteModal";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { useQueryClient } from "@tanstack/react-query";
+import Swal from "sweetalert2";
 
-const SellerOrderDataRow = ({ order, index }) => {
-  const [isOpen, setIsOpen] = useState(false);
+const SellerOrderDataRow = ({ order, index, userEmail }) => {
+  const axiosSecure = useAxiosSecure();
+  const queryClient = useQueryClient();
+  const [status, setStatus] = useState(order.status);
 
-  const { customer, title, category, price, quantity, status, transactionId } =
-    order || {};
+  // status change
+  const handleStatusChange = (e) => {
+    const newStatus = e.target.value;
+    setStatus(newStatus);
 
-  const closeModal = () => setIsOpen(false);
+    axiosSecure.patch(`/orders/${order._id}`, { status: newStatus })
+      .then(() => {
+        queryClient.invalidateQueries(["orders", userEmail]);
+      });
+  };
 
-  const handleCancelOrder = () => {
-    console.log("Order cancelled:", transactionId);
-
-    // 🔜 এখানে backend API call যাবে
-    // axiosSecure.patch(`/orders/cancel/${order._id}`)
-
-    closeModal();
+  // cancel order
+  const handleCancel = () => {
+    Swal.fire({
+      title: "Cancel order?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+    }).then((res) => {
+      if (res.isConfirmed) {
+        axiosSecure.delete(`/orders/${order._id}`)
+          .then(() => {
+            queryClient.invalidateQueries(["orders", userEmail]);
+          });
+      }
+    });
   };
 
   return (
-    <>
-      <tr>
-        <td>{index + 1}</td>
+    <tr>
+      <td>{index + 1}</td>
 
-        <td>
-          <div>
-            <div className="font-bold">{title}</div>
-            <div className="text-sm opacity-50">{category}</div>
-          </div>
-        </td>
+      <td>
+        <div className="font-bold">{order.title}</div>
+        <div className="text-sm opacity-50">{order.category}</div>
+      </td>
 
-        <td>{customer}</td>
-        <td>৳ {price}</td>
-        <td className="text-xs">{transactionId}</td>
-        <td>{quantity}</td>
+      <td>{order.customer}</td>
+      <td>৳ {order.price}</td>
+      <td className="text-xs">{order.transactionId}</td>
+      <td>{order.quantity}</td>
 
-        <td>
-          <span
-            className={`badge ${
-              status === "pending"
-                ? "badge-warning"
-                : status === "completed"
-                ? "badge-success"
-                : "badge-error"
-            }`}
-          >
-            {status}
-          </span>
-        </td>
+      {/* STATUS */}
+      <td>
+        <select
+          value={status}
+          onChange={handleStatusChange}
+          className="select select-bordered select-sm"
+        >
+          <option value="pending">Pending</option>
+          <option value="shipped">Shipped</option>
+          <option value="delivered">Delivered</option>
+        </select>
+      </td>
 
-        <td>
-          {status === "pending" && (
-            <button
-              onClick={() => setIsOpen(true)}
-              className="btn btn-xs btn-error"
-            >
-              Cancel
-            </button>
-          )}
-        </td>
-      </tr>
-
-      {/* Modal */}
-      <DeleteModal
-        isOpen={isOpen}
-        closeModal={closeModal}
-        onConfirm={handleCancelOrder}
-      />
-    </>
+      {/* ACTION */}
+      <td>
+        {status === "pending" && (
+          <button onClick={handleCancel} className="btn btn-xs btn-error">
+            Cancel
+          </button>
+        )}
+      </td>
+    </tr>
   );
 };
 

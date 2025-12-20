@@ -1,14 +1,38 @@
 import React, { useRef } from "react";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import Swal from "sweetalert2";
+
+import useAuth from "../../../hooks/useAuth";
+import { useQueryClient } from "@tanstack/react-query";
 
 const CustomerOrderDataRow = ({ order, index }) => {
   const modalRef = useRef(null);
+  const axiosSecure = useAxiosSecure();
+  const { userEmail } = useAuth();
+  const queryClient = useQueryClient();
 
   const { image, title, category, price, quantity, status, transactionId } =
     order || {};
 
-  const handleDelete = () => {
-    console.log("Deleting order:", transactionId);
-    modalRef.current.close();
+  const handleDelete = async () => {
+    try {
+      await axiosSecure.delete(`/orders/${order._id}`);
+
+      Swal.fire({
+        icon: "success",
+        title: "Cancelled",
+        text: "Your order has been cancelled",
+        timer: 1500,
+        showConfirmButton: false,
+      });
+
+      modalRef.current.close();
+
+      queryClient.invalidateQueries(["my-orders", userEmail]);
+    } catch (error) {
+      Swal.fire("Error", "Failed to cancel order", "error");
+      console.log(error);
+    }
   };
 
   return (
@@ -22,7 +46,9 @@ const CustomerOrderDataRow = ({ order, index }) => {
           <div className="flex items-center gap-3">
             <div className="w-12 h-16 rounded overflow-hidden">
               <img
-                src={image || "https://via.placeholder.com/80x120?text=No+Image"}
+                src={
+                  image || "https://via.placeholder.com/80x120?text=No+Image"
+                }
                 alt={title}
                 className="w-full h-full object-cover"
               />
@@ -61,7 +87,7 @@ const CustomerOrderDataRow = ({ order, index }) => {
               className="btn btn-error btn-xs"
               onClick={() => modalRef.current.showModal()}
             >
-              Delete
+              Cancel
             </button>
           )}
         </td>

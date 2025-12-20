@@ -62,6 +62,9 @@ const Navbar = () => {
             <li>
               <NavLink to={"/librarians"}>Librarians</NavLink>
             </li>
+            <li>
+              <NavLink to={"/my-profile"}>My Profile</NavLink>
+            </li>
           </ul>
         </div>
         <Link to={"/"} className="btn btn-ghost text-xl">
@@ -84,6 +87,9 @@ const Navbar = () => {
           </li>
           <li>
             <NavLink to={"/librarians"}>Librarians</NavLink>
+          </li>
+          <li>
+            <NavLink to={"/my-profile"}>My Profile</NavLink>
           </li>
         </ul>
       </div>

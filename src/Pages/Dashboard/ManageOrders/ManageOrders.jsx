@@ -49,6 +49,7 @@ const ManageOrders = () => {
                   key={order._id}
                   order={order}
                   index={index}
+                  userEmail={user?.email}
                 />
               ))}
             </tbody>

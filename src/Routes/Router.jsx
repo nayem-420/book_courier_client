@@ -19,6 +19,7 @@ import MyOrders from "../Pages/Dashboard/MyOrders/MyOrders";
 import ManageOrders from "../Pages/Dashboard/ManageOrders/ManageOrders";
 import MyInventory from "../Pages/Dashboard/MyInventory/MyInventory";
 import EditBook from "../Layouts/EditBook";
+import MyProfile from "../Pages/Profile/MyProfile";
 
 export const router = createBrowserRouter([
   {
@@ -53,6 +54,10 @@ export const router = createBrowserRouter([
         path: "coverage",
         Component: Coverage,
         loader: () => fetch("/data/warehouses.json").then((res) => res.json()),
+      },
+      {
+        path: "my-profile",
+        element: <MyProfile></MyProfile>
       },
     ],
   },
@@ -93,7 +98,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "edit-book/:id",
-        element: <EditBook></EditBook>
+        element: <EditBook></EditBook>,
       },
       {
         path: "manage-orders",
