@@ -7,7 +7,7 @@ const ManageUsers = () => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    axiosSecure.get("/users").then((res) => {
+    axiosSecure.get("/seller-requests").then((res) => {
       setUsers(res.data);
     });
   }, [axiosSecure]);
@@ -31,11 +31,7 @@ const ManageUsers = () => {
                   <UserDataRow
                     key={user._id}
                     user={user}
-                    refetchUsers={() =>
-                      axiosSecure
-                        .get("/users")
-                        .then((res) => setUsers(res.data))
-                    }
+                    refetchUsers={setUsers}
                   />
                 ))}
               </tbody>

@@ -80,7 +80,7 @@ const Navbar = () => {
             <NavLink to={"/all-books"}>Books</NavLink>
           </li>
           <li>
-            <NavLink to={"/dashboard/my-orders"}>Dashboard</NavLink>
+            <NavLink to={"/dashboard"}>Dashboard</NavLink>
           </li>
           <li>
             <NavLink to={"/coverage"}>Coverage</NavLink>

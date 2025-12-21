@@ -1,139 +1,119 @@
 import { createBrowserRouter } from "react-router";
 import RootLayouts from "../Layouts/RootLayouts";
-import Home from "../Pages/Home/Home";
-import NotFound from "../Pages/Errors/NotFound";
-import Forbidden from "../Pages/Errors/Forbidden";
-import Loading from "../Components/Loading";
-import Coverage from "../Coverage/Coverage";
-import Login from "../Pages/Auth/Login";
-import Register from "../Pages/Auth/Register";
-import ForgetPassword from "../Pages/Auth/ForgetPassword";
 import AuthLayout from "../Layouts/AuthLayout";
-import PrivateRoutes from "./PrivateRoutes";
 import DashboardLayout from "../Layouts/DashboardLayout";
-import Librarians from "../Pages/Dashboard/Librarians/Librarians";
+
+import Home from "../Pages/Home/Home";
 import Books from "../Pages/Home/Books/Books";
 import BookDetails from "../Pages/Home/Books/BookDetails";
 import PaymentsSuccess from "../Pages/Dashboard/Payments/PaymentsSuccess";
+import Coverage from "../Coverage/Coverage";
+import MyProfile from "../Pages/Profile/MyProfile";
+
+import Login from "../Pages/Auth/Login";
+import Register from "../Pages/Auth/Register";
+import ForgetPassword from "../Pages/Auth/ForgetPassword";
+
 import MyOrders from "../Pages/Dashboard/MyOrders/MyOrders";
 import MyInventory from "../Pages/Dashboard/MyInventory/MyInventory";
 import EditBook from "../Layouts/EditBook";
-import MyProfile from "../Pages/Profile/MyProfile";
-import ManageUsers from "../Pages/Dashboard/ManageUsers/ManageUsers";
 import MyBooks from "../Pages/Dashboard/MyBooks/MyBooks";
+import ManageUsers from "../Pages/Dashboard/ManageUsers/ManageUsers";
 import ManageOrders from "../Pages/Dashboard/ManageUsers/ManageOrders";
-import DashboardHome from "../Pages/Dashboard/DashboardHome/DashboardHome";
+import Librarians from "../Pages/Dashboard/Librarians/Librarians";
+
+import PrivateRoutes from "./PrivateRoutes";
+import AdminRoute from "./AdminRoute";
+import { SellerRoute } from "./SellerRoute";
+import NotFound from "../Pages/Errors/NotFound";
+import Forbidden from "../Pages/Errors/Forbidden";
+import Loading from "../Components/Loading";
+import BecomeSeller from "../Pages/Dashboard/SellerOrderDataRow/BecomeSeller";
+import SellerRequests from "../Pages/Dashboard/SellerOrderDataRow/SellerRequests";
 
 export const router = createBrowserRouter([
+  // Public routes
   {
     path: "/",
-    Component: RootLayouts,
+    element: <RootLayouts />,
     children: [
-      {
-        index: true,
-        Component: Home,
-      },
-      {
-        path: "all-books",
-        element: <Books></Books>,
-      },
-      {
-        path: "all-books/:id",
-        element: <BookDetails></BookDetails>,
-      },
-      {
-        path: "payment-success",
-        element: <PaymentsSuccess></PaymentsSuccess>,
-      },
+      { index: true, element: <Home /> },
+      { path: "all-books", element: <Books /> },
+      { path: "all-books/:id", element: <BookDetails /> },
+      { path: "payment-success", element: <PaymentsSuccess /> },
       {
         path: "coverage",
-        Component: Coverage,
+        element: <Coverage />,
         loader: () => fetch("/data/warehouses.json").then((res) => res.json()),
       },
-      {
-        path: "my-profile",
-        element: <MyProfile></MyProfile>,
-      },
+      { path: "my-profile", element: <MyProfile /> },
     ],
   },
 
+  // Auth routes
   {
     path: "/",
-    Component: AuthLayout,
+    element: <AuthLayout />,
     children: [
-      {
-        path: "login",
-        Component: Login,
-      },
-      {
-        path: "register",
-        Component: Register,
-      },
-      {
-        path: "forget-password",
-        Component: ForgetPassword,
-      },
+      { path: "login", element: <Login /> },
+      { path: "register", element: <Register /> },
+      { path: "forget-password", element: <ForgetPassword /> },
     ],
   },
+
+  // Dashboard routes (Protected)
   {
     path: "/dashboard",
     element: (
       <PrivateRoutes>
-        <DashboardLayout></DashboardLayout>
+        <DashboardLayout />
       </PrivateRoutes>
     ),
     children: [
-      {
-        index: true,
-        element: <DashboardHome></DashboardHome>
-      },
-      // USER
-      {
-        path: "my-orders",
-        element: <MyOrders></MyOrders>,
-      },
+      { index: true, element: <MyOrders /> },
 
-      // LIBRARIAN
+      // USER
+      { path: "my-orders", element: <MyOrders /> },
+      { path: "become-seller", element: <BecomeSeller /> },
+
+      // SELLER
       {
         path: "add-book",
-        element: <Librarians></Librarians>,
+        element: (
+          <SellerRoute>
+            <Librarians />
+          </SellerRoute>
+        ),
       },
-      {
-        path: "my-books",
-        element: <MyBooks></MyBooks>,
-      },
-      {
-        path: "manage-orders",
-        element: <ManageOrders></ManageOrders>,
-      },
-      {
-        path: "my-inventory",
-        element: <MyInventory></MyInventory>,
-      },
+      { path: "my-books", element: <MyBooks /> },
+      { path: "my-inventory", element: <MyInventory /> },
+      { path: "manage-orders", element: <ManageOrders /> },
 
       // COMMON
-      {
-        path: "edit-book/:id",
-        element: <EditBook></EditBook>,
-      },
+      { path: "edit-book/:id", element: <EditBook /> },
 
       // ADMIN
       {
         path: "manage-users",
-        element: <ManageUsers></ManageUsers>,
+        element: (
+          <AdminRoute>
+            <ManageUsers />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "seller-requests",
+        element: (
+          <AdminRoute>
+            <SellerRequests />
+          </AdminRoute>
+        ),
       },
     ],
   },
-  {
-    path: "*",
-    Component: NotFound,
-  },
-  {
-    path: "/forbidden",
-    Component: Forbidden,
-  },
-  {
-    path: "/loading",
-    Component: Loading,
-  },
+
+  // Fallback routes
+  { path: "*", element: <NotFound /> },
+  { path: "/forbidden", element: <Forbidden /> },
+  { path: "/loading", element: <Loading /> },
 ]);

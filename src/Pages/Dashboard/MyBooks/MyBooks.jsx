@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import LoadingSpinner from "../../../Components/LoadingSpinner";
 import useAuth from "../../../hooks/useAuth";
 import MyBookDataRow from "./MyBookDataRow";
+import { Link } from "react-router";
 
 const MyBooks = () => {
   const { user } = useAuth();
@@ -25,7 +26,7 @@ const MyBooks = () => {
     },
   });
 
-  if (isLoading) return <LoadingSpinner />;
+  if (isLoading) return <LoadingSpinner></LoadingSpinner>;
 
   if (isError) {
     return (
@@ -37,7 +38,7 @@ const MyBooks = () => {
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-6">
         <h1 className="font-bold text-3xl">My Books ({books.length})</h1>
-        <button className="btn btn-primary">Add New Book</button>
+        <Link to={'/dashboard/add-book'} className="btn btn-primary">Add New Book</Link>
       </div>
 
       {books.length === 0 ? (

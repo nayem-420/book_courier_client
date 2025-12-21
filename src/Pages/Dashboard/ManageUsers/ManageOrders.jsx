@@ -18,7 +18,7 @@ const ManageOrders = () => {
     enabled: !!user?.email,
     queryFn: async () => {
       const res = await axiosSecure.get(
-        `/dashboard/manage-orders/${user.email}`
+        `/dashboard/manage-orders/${user.email.toLowerCase()}`
       );
       return res.data;
     },

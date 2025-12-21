@@ -1,15 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
-import useAuth from "../../hooks/useAuth";
 import useRole from "../../hooks/useRole";
+import useAuth from "../../hooks/useAuth";
 
 const MyProfile = () => {
   const { user, setUser } = useAuth();
   const [role, isLoading] = useRole();
-  console.log(role,isLoading);
   const axiosSecure = useAxiosSecure();
+  const navigate = useNavigate();
 
   const { register, handleSubmit } = useForm({
     defaultValues: {
@@ -17,6 +18,13 @@ const MyProfile = () => {
       image: user?.photoURL || "",
     },
   });
+
+  // Redirect if user is not logged in
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    }
+  }, [user, navigate]);
 
   const onSubmit = async (data) => {
     try {
@@ -32,7 +40,6 @@ const MyProfile = () => {
         showConfirmButton: false,
       });
 
-      // optional: local update
       setUser({
         ...user,
         displayName: data.name,
@@ -44,11 +51,15 @@ const MyProfile = () => {
     }
   };
 
+  if (!user) {
+    // Optional: temporary loader while redirecting
+    return <p>Redirecting to login...</p>;
+  }
+
   return (
     <div className="max-w-xl mx-auto p-6 bg-base-100 rounded-lg shadow">
       <h2 className="text-2xl font-bold mb-6">My Profile</h2>
 
-      {/* Profile Image */}
       <div className="flex justify-center mb-6">
         <img
           src={user?.photoURL || "https://via.placeholder.com/150"}
@@ -59,13 +70,14 @@ const MyProfile = () => {
           {isLoading ? (
             <p>Loading role...</p>
           ) : (
-            <p className="btn btn-outline rounded-3xl">{role}</p>
+            <p className="btn btn-outline rounded-3xl bg-orange-400 text-white border-none hover:bg-orange-600">
+              {role}
+            </p>
           )}
         </div>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        {/* Email */}
         <div>
           <label className="label">Email</label>
           <input
@@ -76,7 +88,6 @@ const MyProfile = () => {
           />
         </div>
 
-        {/* Name */}
         <div>
           <label className="label">Name</label>
           <input
@@ -85,7 +96,6 @@ const MyProfile = () => {
           />
         </div>
 
-        {/* Image URL */}
         <div>
           <label className="label">Profile Image URL</label>
           <input

@@ -1,12 +1,11 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
+import LoadingSpinner from "../../Components/LoadingSpinner";
 import BooksCard from "./Books/BooksCard";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
-import LoadingSpinner from "../../Components/LoadingSpinner";
 
 const HomeBooks = () => {
   const axiosSecure = useAxiosSecure();
-
   const { data: books = [], isLoading } = useQuery({
     queryKey: ["home-books"],
     queryFn: async () => {
@@ -16,7 +15,7 @@ const HomeBooks = () => {
   });
 
   if (isLoading) {
-    return <LoadingSpinner></LoadingSpinner>;
+    return <LoadingSpinner></LoadingSpinner>
   }
 
   return (
@@ -32,7 +31,7 @@ const HomeBooks = () => {
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 my-8">
         {books.map((book) => (
-          <BooksCard key={book._id} book={book} />
+          <BooksCard key={book.id} book={book} />
         ))}
       </div>
     </div>
