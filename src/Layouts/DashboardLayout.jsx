@@ -1,7 +1,7 @@
 import React from 'react';
 import Logo from '../Pages/Shared/Logo';
 import { Link, Outlet } from 'react-router';
-import { FaBook, FaBookOpen, FaClipboardList, FaInbox } from 'react-icons/fa';
+import { FaBook, FaBookOpen, FaClipboardList, FaInbox, FaUsers } from 'react-icons/fa';
 import { MdLibraryAdd } from "react-icons/md";
 
 const DashboardLayout = () => {
@@ -77,7 +77,7 @@ const DashboardLayout = () => {
               {/* Librarians */}
               <li>
                 <Link
-                  to="/librarians"
+                  to="/dashboard/add-book"
                   className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                   data-tip="Add Books"
                 >
@@ -122,7 +122,8 @@ const DashboardLayout = () => {
                 </Link>
               </li>
 
-              {/* my books */}
+
+              {/* my books (seller's book list) */}
               <li>
                 <Link
                   to="/dashboard/my-books"
@@ -133,6 +134,19 @@ const DashboardLayout = () => {
                   <span className="is-drawer-close:hidden">My Books</span>
                 </Link>
               </li>
+
+              {/* Manage Users (Admin page) */}
+              <li>
+                <Link
+                  to="/dashboard/manage-users"
+                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                  data-tip="Manage Users"
+                >
+                  <FaUsers className="my-1.5 size-4" />
+                  <span className="is-drawer-close:hidden">Manage Users</span>
+                </Link>
+              </li>
+
 
               {/* List item */}
               <li>

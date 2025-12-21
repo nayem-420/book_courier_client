@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useParams } from "react-router";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import LoadingSpinner from "../../../Components/LoadingSpinner";
@@ -9,6 +9,7 @@ const BookDetails = () => {
   const { id } = useParams();
   const axiosSecure = useAxiosSecure();
   const modalRef = useRef(null);
+  const [selectedQuantity, setSelectedQuantity] = useState(1);
 
   const {
     data: book = {},
@@ -44,6 +45,20 @@ const BookDetails = () => {
   const handleCloseModal = () => {
     if (modalRef.current) {
       modalRef.current.close();
+    }
+  };
+
+  // Increase quantity (max limit = stock)
+  const incrementQuantity = () => {
+    if (selectedQuantity < quantity) {
+      setSelectedQuantity((prev) => prev + 1);
+    }
+  };
+
+  // Decrease quantity (min limit = 1)
+  const decrementQuantity = () => {
+    if (selectedQuantity > 1) {
+      setSelectedQuantity((prev) => prev - 1);
     }
   };
 
@@ -131,10 +146,24 @@ const BookDetails = () => {
         <div className="divider my-10">More Information</div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-          <div className="p-4 rounded-xl bg-base-200">
-            <h3 className="font-semibold">Quantity</h3>
-            <p className="text-gray-500">{quantity}</p>
+          {/* Quantity Selector */}
+          <div className="flex items-center gap-4 pt-4">
+            <span className="font-semibold">Quantity:</span>
+            <button
+              onClick={decrementQuantity}
+              className="btn btn-outline btn-sm"
+            >
+              -
+            </button>
+            <span className="px-4">{selectedQuantity}</span>
+            <button
+              onClick={incrementQuantity}
+              className="btn btn-outline btn-sm"
+            >
+              +
+            </button>
           </div>
+
           <div className="p-4 rounded-xl bg-base-200">
             <h3 className="font-semibold">Language</h3>
             <p className="text-gray-500">English</p>
@@ -174,7 +203,7 @@ const BookDetails = () => {
 
       {/* Payment Modal */}
       <PurchaseModal
-        book={book}
+        book={{ ...book, selectedQuantity }}
         closeModal={handleCloseModal}
         modalRef={modalRef}
       />

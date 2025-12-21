@@ -2,9 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import LoadingSpinner from "../../../Components/LoadingSpinner";
+import useAuth from "../../../hooks/useAuth";
 
 const PaymentsSuccess = () => {
   const [searchParams] = useSearchParams();
+  const { user,loading } = useAuth();
   const axiosSecure = useAxiosSecure();
   const sessionId = searchParams.get("session_id");
 
@@ -13,36 +15,26 @@ const PaymentsSuccess = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (loading || !user || !sessionId) return;
+
+    if (hasProcessed.current) return;
+    hasProcessed.current = true;
+
     const processPayment = async () => {
-      if (hasProcessed.current || !sessionId) {
-        setIsProcessing(false);
-        return;
-      }
-
-      hasProcessed.current = true;
-
       try {
-        const response = await axiosSecure.patch(
+        await axiosSecure.patch(
           `/dashboard/payment-success?session_id=${sessionId}`
         );
-
-        if (response.data.success) {
-          console.log(
-            response.data.isExisting
-              ? "Order already exists"
-              : "New order created"
-          );
-        }
       } catch (err) {
-        console.error("Payment processing failed:", err);
-        setError("Failed to process payment. Please contact support.");
+        setError("Payment processing failed");
+        console.log(err);
       } finally {
         setIsProcessing(false);
       }
     };
 
     processPayment();
-  }, [sessionId]); 
+  }, [loading, user, sessionId, axiosSecure]);
 
   if (isProcessing) {
     return (

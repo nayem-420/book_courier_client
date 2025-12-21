@@ -16,10 +16,13 @@ import Books from "../Pages/Home/Books/Books";
 import BookDetails from "../Pages/Home/Books/BookDetails";
 import PaymentsSuccess from "../Pages/Dashboard/Payments/PaymentsSuccess";
 import MyOrders from "../Pages/Dashboard/MyOrders/MyOrders";
-import ManageOrders from "../Pages/Dashboard/ManageOrders/ManageOrders";
 import MyInventory from "../Pages/Dashboard/MyInventory/MyInventory";
 import EditBook from "../Layouts/EditBook";
 import MyProfile from "../Pages/Profile/MyProfile";
+import ManageUsers from "../Pages/Dashboard/ManageUsers/ManageUsers";
+import MyBooks from "../Pages/Dashboard/MyBooks/MyBooks";
+import ManageOrders from "../Pages/Dashboard/ManageUsers/ManageOrders";
+import DashboardHome from "../Pages/Dashboard/DashboardHome/DashboardHome";
 
 export const router = createBrowserRouter([
   {
@@ -29,14 +32,6 @@ export const router = createBrowserRouter([
       {
         index: true,
         Component: Home,
-      },
-      {
-        path: "librarians",
-        element: (
-          <PrivateRoutes>
-            <Librarians></Librarians>
-          </PrivateRoutes>
-        ),
       },
       {
         path: "all-books",
@@ -57,7 +52,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "my-profile",
-        element: <MyProfile></MyProfile>
+        element: <MyProfile></MyProfile>,
       },
     ],
   },
@@ -89,20 +84,43 @@ export const router = createBrowserRouter([
     ),
     children: [
       {
+        index: true,
+        element: <DashboardHome></DashboardHome>
+      },
+      // USER
+      {
         path: "my-orders",
         element: <MyOrders></MyOrders>,
+      },
+
+      // LIBRARIAN
+      {
+        path: "add-book",
+        element: <Librarians></Librarians>,
+      },
+      {
+        path: "my-books",
+        element: <MyBooks></MyBooks>,
+      },
+      {
+        path: "manage-orders",
+        element: <ManageOrders></ManageOrders>,
       },
       {
         path: "my-inventory",
         element: <MyInventory></MyInventory>,
       },
+
+      // COMMON
       {
         path: "edit-book/:id",
         element: <EditBook></EditBook>,
       },
+
+      // ADMIN
       {
-        path: "manage-orders",
-        element: <ManageOrders></ManageOrders>,
+        path: "manage-users",
+        element: <ManageUsers></ManageUsers>,
       },
     ],
   },

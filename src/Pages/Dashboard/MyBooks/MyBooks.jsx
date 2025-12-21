@@ -3,7 +3,7 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import LoadingSpinner from "../../../Components/LoadingSpinner";
 import useAuth from "../../../hooks/useAuth";
-import MyBookDataRow from "../MyBookDataRow/MyBookDataRow";
+import MyBookDataRow from "./MyBookDataRow";
 
 const MyBooks = () => {
   const { user } = useAuth();
@@ -18,7 +18,9 @@ const MyBooks = () => {
     queryKey: ["my-books", user?.email],
     enabled: !!user?.email,
     queryFn: async () => {
-      const res = await axiosSecure.get(`/my-inventory/${user?.email}`);
+      const res = await axiosSecure.get(
+        `/dashboard/my-inventory/${user?.email}`
+      );
       return res.data;
     },
   });

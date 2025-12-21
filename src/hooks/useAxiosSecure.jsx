@@ -1,35 +1,39 @@
 import axios from "axios";
-import React, { useEffect } from "react";
-import useAuth from "./useAuth";
+import { useEffect } from "react";
 import { useNavigate } from "react-router";
+import useAuth from "./useAuth";
 
 const axiosSecure = axios.create({
-  baseURL: `http://localhost:3000`,
+  baseURL: "http://localhost:3000",
+  withCredentials: true,
 });
-    
+
 const useAxiosSecure = () => {
-  const { user, logOut } = useAuth();
+  const { user, logOut, loading } = useAuth();
   const navigate = useNavigate();
+
   useEffect(() => {
-    const reqInterceptor = axiosSecure.interceptors.request.use((config) => {
-      config.headers.Authorization = `Bearer ${user?.accessToken}`;
-      return config;
-    });
+    if (loading) return;
+
+    const reqInterceptor = axiosSecure.interceptors.request.use(
+      (config) => {
+        if (user?.accessToken) {
+          config.headers.authorization = `Bearer ${user?.accessToken}`;
+        }
+        return config;
+      },
+      (error) => Promise.reject(error)
+    );
 
     const resInterceptor = axiosSecure.interceptors.response.use(
-      (response) => {
-        return response;
-      },
-      (error) => {
-        console.log(error);
+      (response) => response,
+      async (error) => {
+        const status = error.response?.status;
 
-        const statusCode = error.response?.status;
-        if (statusCode === 401 || statusCode === 403) {
-          logOut().then(() => {
-            navigate("/login");
-          });
+        if (status === 401 || status === 403) {
+          await logOut();
+          navigate("/login");
         }
-
         return Promise.reject(error);
       }
     );
@@ -38,7 +42,8 @@ const useAxiosSecure = () => {
       axiosSecure.interceptors.request.eject(reqInterceptor);
       axiosSecure.interceptors.response.eject(resInterceptor);
     };
-  }, [user, logOut, navigate]);
+  }, [user?.accessToken, loading, logOut, navigate]);
+
   return axiosSecure;
 };
 

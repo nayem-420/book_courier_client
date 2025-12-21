@@ -2,8 +2,8 @@ import React from "react";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
-import LoadingSpinner from "../../../Components/LoadingSpinner";
 import BooksDataRow from "../../../Components/BooksDataRow";
+import LoadingSpinner from "../../../Components/LoadingSpinner";
 
 const MyInventory = () => {
   const { user } = useAuth();

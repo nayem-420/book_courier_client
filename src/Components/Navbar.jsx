@@ -59,9 +59,9 @@ const Navbar = () => {
             <li>
               <NavLink to={"/coverage"}>Coverage</NavLink>
             </li>
-            <li>
+            {/* <li>
               <NavLink to={"/librarians"}>Librarians</NavLink>
-            </li>
+            </li> */}
             <li>
               <NavLink to={"/my-profile"}>My Profile</NavLink>
             </li>
@@ -85,9 +85,9 @@ const Navbar = () => {
           <li>
             <NavLink to={"/coverage"}>Coverage</NavLink>
           </li>
-          <li>
+          {/* <li>
             <NavLink to={"/librarians"}>Librarians</NavLink>
-          </li>
+          </li> */}
           <li>
             <NavLink to={"/my-profile"}>My Profile</NavLink>
           </li>

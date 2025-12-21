@@ -13,13 +13,6 @@ const SocialLogin = () => {
     try {
       const result = await signInGoogle();
 
-      // Debug: Check what we got from Google
-      console.log("Google sign-in result:", {
-        email: result.user?.email,
-        displayName: result.user?.displayName,
-        photoURL: result.user?.photoURL,
-      });
-
       const userInfo = {
         email: result.user?.email,
         displayName: result.user?.displayName,

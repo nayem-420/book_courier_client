@@ -3,9 +3,12 @@ import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import useAuth from "../../hooks/useAuth";
+import useRole from "../../hooks/useRole";
 
 const MyProfile = () => {
   const { user, setUser } = useAuth();
+  const [role, isLoading] = useRole();
+  console.log(role,isLoading);
   const axiosSecure = useAxiosSecure();
 
   const { register, handleSubmit } = useForm({
@@ -52,6 +55,13 @@ const MyProfile = () => {
           alt="Profile"
           className="w-32 h-32 rounded-full object-cover border"
         />
+        <div>
+          {isLoading ? (
+            <p>Loading role...</p>
+          ) : (
+            <p className="btn btn-outline rounded-3xl">{role}</p>
+          )}
+        </div>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

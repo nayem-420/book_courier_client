@@ -74,6 +74,7 @@ const Librarians = () => {
         seller: {
           name: user?.displayName,
           email: user?.email,
+          role: user?.role || "seller",
           image: user?.photoURL,
         },
         createdAt: new Date(),

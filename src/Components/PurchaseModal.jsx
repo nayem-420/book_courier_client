@@ -1,26 +1,37 @@
 import React from "react";
+import Swal from "sweetalert2";
 import useAuth from "../hooks/useAuth";
 import useAxiosSecure from "../hooks/useAxiosSecure";
-import Swal from "sweetalert2";
 
 const PurchaseModal = ({ closeModal, modalRef, book }) => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
 
-  const { _id, title, status, price, description, image, seller, quantity } =
-    book || {};
+  const {
+    _id,
+    title,
+    status,
+    price,
+    description,
+    image,
+    seller,
+    quantity: availableQuantity,
+    selectedQuantity = 1,
+  } = book || {};
+
+  // Total price calculation
+  const totalPrice = price * selectedQuantity;
 
   const handlePayment = async () => {
     try {
       const paymentInfo = {
         bookId: _id,
-        name: title,
         title,
         status,
-        price,
+        price: totalPrice,
         description,
         image,
-        quantity: 1,
+        quantity: selectedQuantity, 
         seller,
         customer: {
           name: user?.displayName,
@@ -38,14 +49,13 @@ const PurchaseModal = ({ closeModal, modalRef, book }) => {
         paymentInfo
       );
 
-      // Redirect to payment URL
+      // Redirect to Stripe payment URL
       if (data?.url) {
         window.location.href = data.url;
       } else {
-        // If no payment gateway, show success
         Swal.fire({
           title: "Payment Successful!",
-          text: `You have successfully purchased "${title}" for ৳${price}`,
+          text: `You have successfully purchased "${title}" (${selectedQuantity} pcs) for ৳${totalPrice}`,
           icon: "success",
           confirmButtonColor: "#3085d6",
           confirmButtonText: "OK",
@@ -88,13 +98,18 @@ const PurchaseModal = ({ closeModal, modalRef, book }) => {
           </div>
 
           <div className="flex justify-between">
-            <span className="text-gray-500">Price:</span>
-            <span className="font-semibold text-primary">৳ {price}</span>
+            <span className="text-gray-500">Quantity:</span>
+            <span className="font-semibold">{selectedQuantity}</span>
+          </div>
+
+          <div className="flex justify-between">
+            <span className="text-gray-500">Total Price:</span>
+            <span className="font-semibold text-primary">৳ {totalPrice}</span>
           </div>
 
           <div className="flex justify-between">
             <span className="text-gray-500">Available:</span>
-            <span className="font-semibold">{quantity} pcs</span>
+            <span className="font-semibold">{availableQuantity} pcs</span>
           </div>
         </div>
 
