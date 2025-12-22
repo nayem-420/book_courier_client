@@ -1,16 +1,59 @@
-# React + Vite
+# BookCourier – Library-to-Home Delivery System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Project Overview
+BookCourier is a library delivery management system that allows users to request book pickup or delivery from nearby libraries. It helps students, researchers, and book lovers borrow and return books without physically visiting the library. The system ensures a seamless library-to-home book experience.
 
-Currently, two official plugins are available:
+## Live Demo
+https://book-courier-auth.web.app
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Key Features
 
-## React Compiler
+### General Features
+- User-friendly interface with responsive design for all devices.
+- Navbar with logo, links (Home, Books, Dashboard, Login/Register), user profile image, hamburger menu for mobile, and theme toggle (light/dark mode).
+- Footer with quick links, contact details, social icons (with X logo), and copyright text.
+- Homepage includes banner with 3 sliders, latest books section, coverage map, and "Why Choose BookCourier" section.
+- At least 1 animated section and 2 extra well-designed sections for better UX.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Authentication System
+- Email/password login and Google social login.
+- Registration with name, email, password (strong validation), and profile image upload.
+- Profile picture updates automatically after registration.
 
-## Expanding the ESLint configuration
+### Books & Orders
+- All Books page: card layout displaying books added by librarians.
+- Book Details page: detailed book info, “Order Now” modal with user info, phone, address, and “Place Order” button.
+- Orders are tracked with status: pending → shipped → delivered; payment status: unpaid/paid.
+- Users can cancel pending orders or pay for pending orders.
+- Librarians can add/edit books, change order statuses, and manage their books.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Dashboard
+#### User Dashboard
+- My Orders: view all orders with status and action buttons (Cancel, Pay Now).
+- My Profile: update profile info.
+- Invoices: view payment history with optional book names.
+
+#### Librarian Dashboard
+- Add Book: form with book name, image, author, price, and status (published/unpublished).
+- My Books: view all added books, edit info, and unpublished books are hidden from users.
+- Orders: manage orders, cancel if needed, change order status.
+
+#### Admin Dashboard
+- All Users: view users and promote them to librarian/admin.
+- Manage Books: publish/unpublish or delete books added by librarians.
+- My Profile: same as user dashboard.
+
+### Additional Features
+- Book Wishlist: users can add books to wishlist and view them in My Wishlist.
+- Review & Rating: users can review or rate books they ordered.
+- Search & Sort: search books by name and sort by price.
+- JWT token verification for protected routes.
+- Optionally: TanStack Query for data fetching, skeleton loaders.
+
+## Tech Stack & Tools
+- Frontend: React, TailwindCSS, Daisy UI
+- Backend: Node.js, Express
+- Database: MongoDB
+- Authentication: Firebase (secure keys using environment variables)
+- Hosting/Deployment: Vercel 
+
