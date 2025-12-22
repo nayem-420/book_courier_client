@@ -48,19 +48,12 @@ https://book-courier-auth.web.app
 - Review & Rating: users can review or rate books they ordered.
 - Search & Sort: search books by name and sort by price.
 - JWT token verification for protected routes.
-- Optionally: TanStack Query for data fetching, skeleton loaders, dark/light mode with TailwindCSS.
+- Optionally: TanStack Query for data fetching, skeleton loaders.
 
 ## Tech Stack & Tools
-- Frontend: React, TailwindCSS, optional ShadCN/Chakra UI/Material UI
+- Frontend: React, TailwindCSS, Daisy UI
 - Backend: Node.js, Express
 - Database: MongoDB
 - Authentication: Firebase (secure keys using environment variables)
-- Hosting/Deployment: Netlify / Vercel / Surge
+- Hosting/Deployment: Vercel 
 
-## Environment Variables
-- `.env` file for securing Firebase config and MongoDB credentials.
-- Example:
-```env
-REACT_APP_FIREBASE_API_KEY=your_api_key
-REACT_APP_FIREBASE_AUTH_DOMAIN=your_auth_domain
-MONGODB_URI=your_mongodb_uri
