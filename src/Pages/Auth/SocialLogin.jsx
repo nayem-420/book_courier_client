@@ -23,6 +23,9 @@ const SocialLogin = () => {
       const res = await axiosSecure.post("/users", userInfo);
       console.log("User saved to DB:", res.data);
 
+      const { data: roleData } = await axiosSecure.get("/users/role");
+      console.log("User role:", roleData.role);
+
       // Navigate after a small delay to ensure state is updated
       const redirectPath = location.state?.from?.pathname || "/";
 

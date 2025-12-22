@@ -52,7 +52,11 @@ const Register = () => {
         return;
       }
 
-      navigate(location.state || "/");
+      const { data: roleData } = await axiosSecure.get("/users/role");
+      console.log("User role:", roleData.role);
+
+      navigate(location.state?.from?.pathname || "/");
+      
     } catch (error) {
       console.error("Registration failed:", error);
 
