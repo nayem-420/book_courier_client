@@ -5,7 +5,7 @@ import { Link, useLocation, useNavigate } from "react-router";
 import SocialLogin from "./SocialLogin";
 import { useForm } from "react-hook-form";
 import useAuth from "../../hooks/useAuth";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
+// import useAxiosSecure from "../../hooks/useAxiosSecure";
 import toast from "react-hot-toast";
 
 const Login = () => {
@@ -18,7 +18,7 @@ const Login = () => {
   const { signInUser } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
-  const axiosSecure = useAxiosSecure();
+  // const axiosSecure = useAxiosSecure();
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -27,11 +27,7 @@ const Login = () => {
       const result = await signInUser(data.email, data.password);
       console.log(result.user);
 
-      const token = await result.user.getIdToken();
-      console.log(token);
-
-      const roleResponse = await axiosSecure.get("/users/role");
-      console.log("User role:", roleResponse.data.role);
+      // await axiosSecure('/users/role')
 
       toast.success("Login successful!");
       navigate(location.state?.from?.pathname || "/");
