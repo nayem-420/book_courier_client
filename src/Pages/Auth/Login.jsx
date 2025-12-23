@@ -33,7 +33,7 @@ const Login = () => {
 
       setUser({
         ...result.user,
-        accessToken: token, // এটা interceptor এ use হবে
+        accessToken: token,
       });
 
       const roleResponse = await axiosSecure.get("/users/role");
