@@ -15,7 +15,7 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
-  const { signInUser,setUser } = useAuth();
+  const { signInUser } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
@@ -26,15 +26,6 @@ const Login = () => {
     try {
       const result = await signInUser(data.email, data.password);
       console.log(result.user);
-
-      // Firebase JWT token
-      const token = await result.user.getIdToken();
-      result.user.accessToken = token;
-
-      setUser({
-        ...result.user,
-        accessToken: token,
-      });
 
       const roleResponse = await axiosSecure.get("/users/role");
       console.log("User role:", roleResponse.data.role);
