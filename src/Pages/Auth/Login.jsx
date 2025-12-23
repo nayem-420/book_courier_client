@@ -5,6 +5,8 @@ import { Link, useLocation, useNavigate } from "react-router";
 import SocialLogin from "./SocialLogin";
 import { useForm } from "react-hook-form";
 import useAuth from "../../hooks/useAuth";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const {
@@ -16,18 +18,32 @@ const Login = () => {
   const { signInUser } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+  const axiosSecure = useAxiosSecure();
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleLogin = (data) => {
-    signInUser(data.email, data.password)
-      .then((result) => {
-        console.log(result.user);
-        navigate(location?.state || "/");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  const handleLogin = async (data) => {
+    try {
+      const result = await signInUser(data.email, data.password);
+      console.log(result.user);
+
+      const roleResponse = await axiosSecure.get("/users/role");
+      console.log("User role:", roleResponse.data.role);
+
+      toast.success("Login successful!");
+      navigate(location.state?.from?.pathname || "/");
+    } catch (error) {
+      console.log(error);
+
+      // Firebase error handle
+      if (error.code === "auth/wrong-password") {
+        toast.error("Wrong password!");
+      } else if (error.code === "auth/user-not-found") {
+        toast.error("User not found!");
+      } else {
+        toast.error("Login failed. Please try again.");
+      }
+    }
   };
 
   return (

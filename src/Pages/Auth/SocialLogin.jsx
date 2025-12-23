@@ -2,6 +2,7 @@ import React from "react";
 import useAuth from "../../hooks/useAuth";
 import { useLocation, useNavigate } from "react-router";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import toast from "react-hot-toast";
 
 const SocialLogin = () => {
   const { signInGoogle } = useAuth();
@@ -26,16 +27,10 @@ const SocialLogin = () => {
       const { data: roleData } = await axiosSecure.get("/users/role");
       console.log("User role:", roleData.role);
 
-      // Navigate after a small delay to ensure state is updated
-      const redirectPath = location.state?.from?.pathname || "/";
-
-      setTimeout(() => {
-        navigate(redirectPath, { replace: true });
-        // Force a page reload if needed (last resort)
-        // window.location.href = redirectPath;
-      }, 200);
+      toast.success("Login successful!");
+      navigate(location.state?.from?.pathname || "/");
     } catch (error) {
-      console.error("Google sign-in error:", error);
+      toast.error("Google sign-in error:", error);
     }
   };
 

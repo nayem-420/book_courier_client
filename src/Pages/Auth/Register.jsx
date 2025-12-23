@@ -7,6 +7,8 @@ import { useForm } from "react-hook-form";
 import useAuth from "../../hooks/useAuth";
 import { imageUpload } from "../../utils";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { toast } from "react-hot-toast";
+import LoadingSpinner from "../../Components/LoadingSpinner";
 
 const Register = () => {
   const {
@@ -14,62 +16,53 @@ const Register = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+
   const location = useLocation();
   const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
+  const { registerUser, updateUserProfile, loading } = useAuth();
 
-  const { registerUser, updateUserProfile } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
-  const [backendError, setBackendError] = useState(""); 
+
+  if (loading) return <LoadingSpinner></LoadingSpinner>
 
   const handleRegistration = async (data) => {
     try {
-      setBackendError(""); 
       const profileImg = data.photo[0];
 
       // Firebase register
       const result = await registerUser(data.email, data.password);
-      console.log(result.user);
+      console.log(result);
 
-      // Image upload
+      // Upload profile image
       const photoURL = await imageUpload(profileImg);
 
+      // Update Firebase profile
       await updateUserProfile({
         displayName: data.name,
-        photoURL: photoURL,
+        photoURL,
       });
 
-      const response = await axiosSecure.post("/users", {
+      // Save user to backend with default role
+      await axiosSecure.post("/users", {
         email: data.email,
         displayName: data.name,
         photoURL,
       });
 
-      if (response.data.message === "User already exists") {
-        setBackendError(
-          "This email is already registered. Please login instead."
-        );
-        return;
-      }
+      await axiosSecure.get("/users/role")
 
-      // const { data: roleData } = await axiosSecure.get("/users/role");
-      // console.log("User role:", roleData.role);
-
+      toast.success("Registration successful!");
       navigate(location.state?.from?.pathname || "/");
-
     } catch (error) {
       console.error("Registration failed:", error);
 
       if (error.code === "auth/email-already-in-use") {
-        setBackendError(
-          "This email is already registered. Please login instead."
-        );
+        toast.error("This email is already registered. Please login instead.");
       } else if (error.code === "auth/weak-password") {
-        setBackendError(
-          "Password is too weak. Please use a stronger password."
-        );
+        toast.error("Password is too weak. Please use a stronger password.");
       } else {
-        setBackendError("Registration failed. Please try again.");
+        toast.error("Registration failed. Please try again.");
       }
     }
   };
@@ -92,11 +85,10 @@ const Register = () => {
             We're a Digital Agency.
           </h2>
           <p className="text-sm opacity-90">
-            We are glad to see you again! Get access to your Orders, Wishlist
-            and Recommendations.
+            Access your Orders, Wishlist, and Recommendations.
           </p>
           <p className="mt-8 text-sm">
-            Already have an account...
+            Already have an account?{" "}
             <Link
               to={"/login"}
               className="font-semibold underline cursor-pointer"
@@ -109,7 +101,6 @@ const Register = () => {
 
       {/* Right Section */}
       <div className="flex items-center justify-center p-6">
-        {/* Logo – top right */}
         <Link to={"/"} className="absolute top-6 right-6">
           <Logo />
         </Link>
@@ -123,13 +114,6 @@ const Register = () => {
             onSubmit={handleSubmit(handleRegistration)}
             className="space-y-4"
           >
-            {/* Backend Error Message */}
-            {backendError && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-                <p className="text-red-600 text-sm">{backendError}</p>
-              </div>
-            )}
-
             <div>
               <label className="label">
                 <span className="label-text">Name</span>
@@ -140,7 +124,7 @@ const Register = () => {
                 className="input input-bordered w-full"
                 {...register("name", { required: true })}
               />
-              {errors.name?.type === "required" && (
+              {errors.name && (
                 <p className="text-red-500 text-sm mt-1">Name is required.</p>
               )}
             </div>
@@ -155,7 +139,7 @@ const Register = () => {
                 className="input input-bordered w-full"
                 {...register("email", { required: true })}
               />
-              {errors.email?.type === "required" && (
+              {errors.email && (
                 <p className="text-red-500 text-sm mt-1">Email is required.</p>
               )}
             </div>
@@ -164,13 +148,12 @@ const Register = () => {
               <label className="label">
                 <span className="label-text">Profile Photo</span>
               </label>
-
               <input
                 type="file"
                 className="file-input file-input-bordered w-full"
                 {...register("photo", { required: true })}
               />
-              {errors.photo?.type === "required" && (
+              {errors.photo && (
                 <p className="text-red-500 text-sm mt-1">Photo is required.</p>
               )}
             </div>
@@ -187,8 +170,7 @@ const Register = () => {
                   {...register("password", {
                     required: true,
                     minLength: 6,
-                    pattern:
-                      /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).+$/,
+                    pattern: /^(?=.*[a-z])(?=.*[^A-Za-z0-9]).+$/,
                   })}
                 />
                 <button
@@ -215,14 +197,14 @@ const Register = () => {
               )}
               {errors.password?.type === "pattern" && (
                 <p className="text-red-500 text-sm mt-1">
-                  Password must have at least one uppercase, at least one
-                  lowercase, at least one number, and at least one special
-                  character
+                  Password must have at least one lowercase letter and one
+                  special character
                 </p>
               )}
             </div>
+
             <p className="mt-8 text-sm">
-              Already have an account...
+              Already have an account?{" "}
               <Link
                 to={"/login"}
                 className="font-semibold underline cursor-pointer"
@@ -234,10 +216,7 @@ const Register = () => {
           </form>
 
           <div className="divider my-6">OR</div>
-
-          <div className="w-full">
-            <SocialLogin></SocialLogin>
-          </div>
+          <SocialLogin />
         </div>
       </div>
     </div>
