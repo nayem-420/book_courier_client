@@ -27,6 +27,9 @@ const Login = () => {
       const result = await signInUser(data.email, data.password);
       console.log(result.user);
 
+      const token = await result.user.getIdToken();
+      console.log(token);
+
       const roleResponse = await axiosSecure.get("/users/role");
       console.log("User role:", roleResponse.data.role);
 
